@@ -129,7 +129,7 @@ django_heroku.settings(locals())
 STATIC_URL = '/static/'
 
 # Place static in the same location as webpack build files
-# STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'build')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build', 'static'),
