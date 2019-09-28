@@ -131,11 +131,8 @@ STATIC_URL = '/static/'
 # Place static in the same location as webpack build files
 # STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
 
-# Django's staticfiles serve the JS and CSS from create-react-app's build with these settings:
-REACT_APP_DIR = os.path.join(BASE_DIR, 'frontend')
-
 STATICFILES_DIRS = [
-    os.path.join(REACT_APP_DIR, 'build', 'static'),
+    os.path.join(BASE_DIR, 'build', 'static'),
 ]
 
 # If you want to serve user uploaded files add these settings
