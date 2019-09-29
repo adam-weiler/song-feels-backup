@@ -25,6 +25,7 @@ urlpatterns = [
     # path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('api/it/', csrf_exempt(views.ApiView.as_view())),
+    path('api/song/', csrf_exempt(views.SongView.as_view())),
 
     url(r'^', views.FrontendAppView.as_view()) # This is a catch-all for React.
 ]
