@@ -34,7 +34,7 @@ from django.views.generic import View
 
 
 # SongFeels imports
-from common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
+from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 # from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 
 
@@ -44,7 +44,8 @@ from common_words import common_words  # A list of common or short words that ca
 
 
 # These work locally:
-file = open('./CSV/testFile.csv', 'r')  # A smaller version of the VAD database.
+file = open('backend/testFile.csv', 'r')  # A smaller version of the VAD database.
+# file = open('backend/libra.csv', 'r')  # A smaller version of the VAD database.
 # file = open('./CSV/libra.csv', 'r')  # The full version of the VAD database.
 librareader = csv.reader(file)  # Saves the CSV file to a variable.
 
@@ -102,7 +103,7 @@ class SongView(View):
 
         self.title = 'The Rising Sun Blues'
 
-        self.unfiltered_lyrics = "There is a house in New Orleans they call the Rising Sun It’s been the ruin of many a poor girl and me, O God, for one If I had listened what Mama said, I’d be at home today Being so young and foolish, poor boy, let a rambler lead me astray Go tell my baby sister never do like I have done To shun that house in New Orleans they call the Rising Sun My mother she’s a tailor, she sewed these new blue jeans My sweetheart, he’s a drunkard, Lord, Lord, drinks down in New Orleans The only thing a drunkard needs is a suitcase and a trunk The only time he’s satisfied is when he’s on a drunk Fills his glasses to the brim, passes them around Only pleasure he gets out of life is hoboin’ from town to town One foot is on the platform and the other one on the train I’m going back to New Orleans to wear that ball and chain Going back to New Orleans, my race is almost run Going back to spend the rest of my days beneath that Rising Sun"
+        self.unfiltered_lyrics = "There is a house in New Orleans they call the Rising SunIt’s been the ruinof many a poor girl and me, O God, for one If I had listened what Mama said, I’d be at home today Being so young and foolish, poor boy, let a rambler lead me astray Go tell my baby sister never do like I have done To shun that house in New Orleans they call the Rising Sun My mother she’s a tailor, she sewed these new blue jeans My sweetheart, he’s a drunkard, Lord, Lord, drinks down in New Orleans The only thing a drunkard needs is a suitcase and a trunk The only time he’s satisfied is when he’s on a drunk Fills his glasses to the brim, passes them around Only pleasure he gets out of life is hoboin’ from town to town One foot is on the platform and the other one on the train I’m going back to New Orleans to wear that ball and chain Going back to New Orleans, my race is almost run Going back to spend the rest of my days beneath that Rising Sun" # 
 
         # Several steps must be taken to prepare the lyrics before comparing to VAD database:
         # Remove special characters and punctuation.
@@ -142,16 +143,62 @@ class SongView(View):
         return lyrics
 
 
+    def convertToVad(self, num):  # Converts the database value (1 to 10) into a Vad number (-1 to 1).
+        num = ((float(num) - 5) / 10)
+
+        if num > 0:
+            num = num + .5
+        else:
+            num = num - .5
+        return num
+
+
+    def whichEmotion(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
+        # Gloomy
+        if (valence <= -.75 and arousal <= 0):
+            return "Sadness"
+        elif (valence <= -.75 and arousal > 0):
+            return "Fear"
+        elif (valence <= -.64 and arousal > 0):
+            return "Disgust"
+        elif (valence <= -.54 and arousal > 0):
+            return "Anger"
+        # Bored
+        # Indifferent
+        # Overwhelmed
+        # Anxious
+        # Shy
+
+        # Consoled
+        # Hopeful
+        # Inspired
+        # Relaxed
+        # Peaceful
+        # Plesant
+        elif (valence >= .8 and arousal > 0):
+            return "Joy"
+        elif (valence >= .64 and arousal > 0):
+            return "Surprise"
+        else:
+            return "Neutral"
+
+
     def compareToVADfile(self, lyrics):
         length = len(lyrics)
         vad_lyrics = []
 
         for line in librareader:  # For each line in VAD database CSV file.
-            word=line[1]  # Takes word from B column of CSV.
+            word = line[1]  # Takes word from B column of CSV.
 
             if word in lyrics:  # If current word of CSV matches a word in the lyrics.
-                # print(f'Matching word found: {word}')
-                vad_lyrics.append(word)
+                print(f'Matching word found: {word}')
+                v_mean_sum = self.convertToVad(line[2])  # Valence Mean sum.
+                a_mean_sum = self.convertToVad(line[5])  # Arousal Mean sum.
+                d_mean_sum = self.convertToVad(line[8])  # Dominance Mean sum
+
+                emotion = self.whichEmotion(v_mean_sum, a_mean_sum, d_mean_sum)
+
+                vad_lyrics.append({'word':word, 'v_mean_sum':v_mean_sum, 'a_mean_sum':a_mean_sum, 'd_mean_sum':d_mean_sum, 'emotion':emotion})
 
         return vad_lyrics
 
