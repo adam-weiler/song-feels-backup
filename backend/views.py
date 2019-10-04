@@ -8,9 +8,11 @@
 # Python imports:
 # from collections import OrderedDict 
 import csv  # Needed to open .CSV files.
+import json
 import logging
 import os
 import re  # Needed to strip punctuation from unfiltered_lyrics.
+import requests  # Needed to make API calls.
 # import string  # Needed to strip punctuation from unfiltered_lyrics.
 
 
@@ -124,34 +126,35 @@ class SongView(View):
         return lyrics
 
 
-    def convertToVad(self, num):  # Converts the database value (1 to 10) into a Vad number (-1 to 1).
-        num = ((float(num) - 5) / 10)
+    # def convertToVad(self, num):  # Converts the database value (1 to 10) into a Vad number (-1 to 1).
+    #     num = ((float(num) - 5) / 10)
 
-        if num > 0:
-            num = num + .5
-        else:
-            num = num - .5
-        return num
+    #     if num > 0:
+    #         num = num + .5
+    #     else:
+    #         num = num - .5
+    #     return num
 
 
     def whichEmotionBasic(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
-        if valence >= 0:  # A positive emotion.
-            if arousal > .4:
+        if valence >= 6:  # A positive emotion.
+            if valence >= 8.47:
                 return "Happy"  # Joy
             else:
                 return "Excited"  # Surprise
         else:  # A negative emotion.
-            if valence <= -.75:
-                if arousal >= 0:
-                    return "Fear"  # Fear
+            if dominance <= 5:  # A powerless emotion
+                if arousal >= 7.1:
+                    return "Fear"
                 else:
-                    return "Sad"  # Sadness
-            elif valence <= -.50:
-                return "Bored"  # Disgust
-            elif valence <= -.25:
-                return "Angry"  # Anger
+                    return "Sad"
             else:
-                return "IDK"
+                if arousal >= 7.7:
+                    return "Anger"
+                else:
+                    return "Bored"
+
+
 
 
     # def whichEmotionSpecific(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
@@ -243,9 +246,9 @@ class SongView(View):
 
             if word in lyrics:  # If current word of CSV matches a word in the lyrics.
                 print(f'Matching word found: {word}')
-                v_mean_sum = self.convertToVad(line[2])  # Valence Mean sum.
-                a_mean_sum = self.convertToVad(line[5])  # Arousal Mean sum.
-                d_mean_sum = self.convertToVad(line[8])  # Dominance Mean sum
+                v_mean_sum = float(line[2])  # Valence Mean sum.
+                a_mean_sum = float(line[5])  # Arousal Mean sum.
+                d_mean_sum = float(line[8])  # Dominance Mean sum
 
                 emotionBasic = self.whichEmotionBasic(v_mean_sum, a_mean_sum, d_mean_sum)
 
@@ -255,8 +258,20 @@ class SongView(View):
 
 
     def get(self, request):
-        return JsonResponse({
-            "def song get": self.convertToVad(7)
+        singer = 'animals'
+        song = 'rising sun'
+
+        try:
+            response = requests.get(f'https://api.audd.io/findLyrics/?q={singer}%20{song}')
+            body = json.loads(response.content)
+            print (body['result'][0]['lyrics'])
+            return JsonResponse({
+                'lyrics': body['result'][0]['lyrics']
+        })
+        except:
+            return JsonResponse({
+                'error': response.status_code,
+                'message': 'Something went wrong!'
         })
 
     def callLyricsAPI(self):
@@ -264,8 +279,7 @@ class SongView(View):
 
         self.title = 'The Rising Sun Blues'
 
-        self.unfiltered_lyrics = "[Verse 1] Hello, it's me I was wondering if after all these years you'd like to meet To go over everything They say that time's supposed to heal ya, but I ain't done much healing Hello, can you hear me? I'm in California dreaming about who we used to be When we were younger and free I've forgotten how it felt before the world fell at our feet There's such a difference between us And a million miles [Chorus] Hello from the other side I must've called a thousand times To tell you I'm sorry For everything that I've done But when I call, you never seem to be home Hello from the outside At least I can say that I've tried To tell you I'm sorry, for breaking your heart But it don't matter It clearly doesn't tear you apart anymore [Verse 2] Hello, how are you? It's so typical of me to talk about myself, I'm sorry I hope that you're well Did you ever make it out of that town where nothing ever happened? It's no secret that the both of us Are running out of time [Chorus] So hello from the other side I must've called a thousand times To tell you I'm sorry For everything that I've done But when I call, you never seem to be home Hello from the outside At least I can say that I've tried To tell you I'm sorry, for breaking your heart But it don't matter It clearly doesn't tear you apart anymore [Bridge] (Highs, highs, highs, highs, lows, lows, lows, lows) Ooh, anymore (Highs, highs, highs, highs, lows, lows, lows, lows) Ooh, anymore (Highs, highs, highs, highs, lows, lows, lows, lows) Ooh, anymore (Highs, highs, highs, highs, lows, lows, lows, lows) Anymore [Chorus] Hello from the other side I must've called a thousand times To tell you I'm sorry For everything that I've done But when I call, you never seem to be home Hello from the outside At least I can say that I've tried To tell you I'm sorry, for breaking your heart But it don't matter It clearly doesn't tear you apart anymore [Produced by Greg Kurstin] [Music Video]"
-        #There is a house in [verse] [Verse] [chorus] [Chorus] [refrain] [Refrain] New Orleans they call the Rising SunIt’s been the ruinof many a poor girl and me, O God, for one If I had listened what Mama said, I’d be at home today Being so young and foolish, poor boy, let a rambler lead me astray Go tell my baby sister never do like I have done To shun that house in New Orleans they call the Rising Sun My mother she’s a tailor, she sewed these new blue jeans My sweetheart, he’s a drunkard, Lord, Lord, drinks down in New Orleans The only thing a drunkard needs is a suitcase and a trunk The only time he’s satisfied is when he’s on a drunk Fills his glasses to the brim, passes them around Only pleasure he gets out of life is hoboin’ from town to town One foot is on the platform and the other one on the train I’m going back to New Orleans to wear that ball and chain Going back to New Orleans, my race is almost run Going back to spend the rest of my days beneath that Rising Sun" # 
+        self.unfiltered_lyrics = "Every night in my dreams I see you, I feel you That is how I know you go on Far across the distance And spaces between us You have come to show you go on Near, far, wherever you are I believe that the heart does go on Once more you open the door And you're here in my heart And my heart will go on and on Love can touch us one time And last for a lifetime And never let go till we're gone Love was when I loved you One true time I hold to In my life we'll always go on Near, far, wherever you are I believe that the heart does go on Once more you open the door And you're here in my heart And my heart will go on and on You're here, there's nothing I fear And I know that my heart will go on We'll stay forever this way You are safe in my heart and My heart will go on and on " # 
 
         # Several steps must be taken to prepare the lyrics before comparing to VAD database:
         # Remove special characters and punctuation.
@@ -322,9 +336,11 @@ rising_sun.callLyricsAPI()
 # print(rising_sun.filtered_lyrics)
 # print()
 # print(len(rising_sun.vad_lyrics))
-# print(rising_sun.vad_lyrics)
+print(rising_sun.vad_lyrics)
 
 
 # print(SongView.get(ThisSong, 'GET'))
 
 # print(common_words)
+
+# print(rising_sun.get('animals'))

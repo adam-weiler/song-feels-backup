@@ -47,3 +47,6 @@ common_words = ['a', 'ah', 'about', 'above', 'across', 'after', 'again', 'ago', 
 # cuz, gonna, huh, uh, why'd
 
 # Maybe remove duplicate characters. (What does this mean?)
+
+
+# Some random words have emotions; tell, go, know will, see, way; should I remove these?
