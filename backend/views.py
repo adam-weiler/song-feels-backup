@@ -268,8 +268,10 @@ class SongView(View):
         query = request.GET.urlencode()
         print(query)
 
+        body = {"status":"success","result":[{"song_id":"53173","artist_id":"12757","title":"Hurt","title_with_featured":"Hurt","full_title":"Hurt by Nine Inch Nails","artist":"Nine Inch Nails","lyrics":"I hurt myself today...","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"30526404\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=30526404\"},{\"native_uri\":\"spotify:track:4pFnV6aV1bnEDqPDGBlrNp\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/4pFnV6aV1bnEDqPDGBlrNp\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=g0bZtf5MCzY\"}]"},{"song_id":"2858508","artist_id":"12757","title":"Hurt (Quiet)","title_with_featured":"Hurt (Quiet)","full_title":"Hurt (Quiet) by Nine Inch Nails","artist":"Nine Inch Nails","lyrics":"I also hurt myself today...","media":"[{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=zhK2hxnBtWw\"}]"}]}
+
         return JsonResponse({
-            'query': query
+            'songList': body['result']
         })
 
         # try:
@@ -293,7 +295,7 @@ class SongView(View):
 
         self.title = 'The Rising Sun Blues'
 
-        self.unfiltered_lyrics = "Every night in my dreams I see you, I feel you That is how I know you go on Far across the distance And spaces between us You have come to show you go on Near, far, wherever you are I believe that the heart does go on Once more you open the door And you're here in my heart And my heart will go on and on Love can touch us one time And last for a lifetime And never let go till we're gone Love was when I loved you One true time I hold to In my life we'll always go on Near, far, wherever you are I believe that the heart does go on Once more you open the door And you're here in my heart And my heart will go on and on You're here, there's nothing I fear And I know that my heart will go on We'll stay forever this way You are safe in my heart and My heart will go on and on " # 
+        self.unfiltered_lyrics = "There is a house in New Orleans they call the Rising SunIt’s been the ruinof many a poor girl and me, O God, for one If I had listened what Mama said, I’d be at home today Being so young and foolish, poor boy, let a rambler lead me astray Go tell my baby sister never do like I have done To shun that house in New Orleans they call the Rising Sun My mother she’s a tailor, she sewed these new blue jeans My sweetheart, he’s a drunkard, Lord, Lord, drinks down in New Orleans The only thing a drunkard needs is a suitcase and a trunk The only time he’s satisfied is when he’s on a drunk Fills his glasses to the brim, passes them around Only pleasure he gets out of life is hoboin’ from town to town One foot is on the platform and the other one on the train I’m going back to New Orleans to wear that ball and chain Going back to New Orleans, my race is almost run Going back to spend the rest of my days beneath that Rising Sun " # 
 
         # Several steps must be taken to prepare the lyrics before comparing to VAD database:
         # Remove special characters and punctuation.

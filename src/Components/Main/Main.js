@@ -16,7 +16,7 @@ import './Main.css';
 export default class Main extends Component {
     state = {
         searchInput: '',
-        listOfSongs: [],
+        listOfSongs: '',
         errorMessage: ''
     }
 
@@ -28,38 +28,47 @@ export default class Main extends Component {
         let artistQuery = document.querySelector('#artistInput').value;
 
         if (!songQuery) {
-            console.error('Error; no song name.')
+            console.error('Error; no song name.');
             this.setState({
                 errorMessage: 'Please enter a valid song name.'
-            })
-            
+            });
         } else {
-            console.log('Good to go; song name: ', songQuery)
+            console.log('Good to go; song name: ', songQuery);
 
-            axios.get(`/api/song_search/?q=${songQuery}`)
+            let query = songQuery;
+            if (artistQuery) {
+                query += `_${artistQuery}`;
+            }
+
+            axios.get(`/api/song_search/?q=${query}`)
             .then(response => {
-                console.log(response.data);
-            })
+                console.log(response.data.songList);
+
+                this.setState({
+                    errorMessage: '',
+                    listOfSongs: response.data.songList
+                });
+            });
         }
     }
 
     render() {
         return (
-            const [validated, setValidated] = useState(false);
+            // const [validated, setValidated] = useState(false);
 
             <main className='jumbotron jumbotron-fluid'>
-                <Form noValidate validated={validated}>
+                {/* <Form noValidate validated={validated}> */}
+                <Form>
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
                         <Form.Control type='text' name='songInput' placeholder='Song name' required/>
                     </Form.Group>
 
                     {
-                        this.state.errorMessage
-                        ? <Alert variant='danger'>{this.state.errorMessage}</Alert>
-                        : 
-                        ''
-
+                        !this.state.errorMessage
+                        ? ''
+                        : <Alert variant='danger'>{this.state.errorMessage}</Alert>
+                        
                     }
 
                     <Form.Group controlId='artistInput'>
@@ -70,6 +79,14 @@ export default class Main extends Component {
                         Search
                     </Button>
                 </Form>
+
+                {
+                    !this.state.listOfSongs
+                    ? ''
+                    : <>
+                        <p>We found 2 results:</p><p>{this.state.listOfSongs[0].artist}</p>
+                    </>
+                }
             </main>
         );
     }
