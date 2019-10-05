@@ -8,12 +8,16 @@
 # Python imports:
 # from collections import OrderedDict 
 import csv  # Needed to open .CSV files.
+import dotenv
 import json
 import logging
 import os
 import re  # Needed to strip punctuation from unfiltered_lyrics.
 import requests  # Needed to make API calls.
 # import string  # Needed to strip punctuation from unfiltered_lyrics.
+
+dotenv.load_dotenv()
+audd_key = os.environ.get('AUDD_API_KEY')
 
 
 # Where am I?
@@ -261,18 +265,28 @@ class SongView(View):
         singer = 'animals'
         song = 'rising sun'
 
-        try:
-            response = requests.get(f'https://api.audd.io/findLyrics/?q={singer}%20{song}')
-            body = json.loads(response.content)
-            print (body['result'][0]['lyrics'])
-            return JsonResponse({
-                'lyrics': body['result'][0]['lyrics']
+        query = request.GET.urlencode()
+        print(query)
+
+        return JsonResponse({
+            'query': query
         })
-        except:
-            return JsonResponse({
-                'error': response.status_code,
-                'message': 'Something went wrong!'
-        })
+
+        # try:
+            # data = {
+            #     'api_token' : audd_key
+            # }
+            # response = requests.get(f'https://api.audd.io/findLyrics/?q={singer}%20{song}', data=data)
+            # body = json.loads(response.content)
+            # print (body['result'][0]['lyrics'])
+            # return JsonResponse({
+            #     'lyrics': body['result'][0]['lyrics']
+        # })
+        # except:
+        #     return JsonResponse({
+        #         'error': response.status_code,
+        #         'message': 'Something went wrong!'
+        # })
 
     def callLyricsAPI(self):
         # Makes a call to Lyrics API and returns lyrics.
@@ -336,7 +350,7 @@ rising_sun.callLyricsAPI()
 # print(rising_sun.filtered_lyrics)
 # print()
 # print(len(rising_sun.vad_lyrics))
-print(rising_sun.vad_lyrics)
+# print(rising_sun.vad_lyrics)
 
 
 # print(SongView.get(ThisSong, 'GET'))

@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+// Vanilla React:
+import React, { Component } from 'react';
+// import logo from './logo.svg';
+
+// Smaller components:
+import Main from './Components/Main/Main.js';
+
+// Call stylesheet last:
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <header>
+                <h1>SongFeels</h1>
+            </header>
+            <Main />
+        </div>
+    );
 }
 
 export default App;

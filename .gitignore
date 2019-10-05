@@ -88,3 +88,8 @@ db.sqlite3
 
 # Django
 staticfiles/
+
+
+# dotenv environment variables file
+.env
+.env.test
