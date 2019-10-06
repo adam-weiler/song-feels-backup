@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 
 // Smaller components:
+import Footer from './Components/Footer/Footer.js';
 import Main from './Components/Main/Main.js';
 
 // Call stylesheet last:
@@ -15,6 +16,7 @@ function App() {
                 <h1>SongFeels</h1>
             </header>
             <Main />
+            <Footer />
         </div>
     );
 }

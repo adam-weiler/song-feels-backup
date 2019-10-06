@@ -4,11 +4,14 @@ import React, { Component, useState } from 'react';
 // Third-party libraries:
 import axios from 'axios';
 
+// Smaller components:
+import SearchResults from './SearchResults/SearchResults.js';
+
 // Bootstrap-React components:
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+// import Jumbotron from 'react-bootstrap/Jumbotron';
 
 // Call stylesheet last:
 import './Main.css';
@@ -52,6 +55,11 @@ export default class Main extends Component {
         }
     }
 
+    handleSongClick = (event) => {
+        event.preventDefault();
+        console.log('User clicked a song:', event.target);
+    }
+
     render() {
         return (
             // const [validated, setValidated] = useState(false);
@@ -61,7 +69,7 @@ export default class Main extends Component {
                 <Form>
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
-                        <Form.Control type='text' name='songInput' placeholder='Song name' required/>
+                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='TEMPORARY'/>
                     </Form.Group>
 
                     {
@@ -84,7 +92,7 @@ export default class Main extends Component {
                     !this.state.listOfSongs
                     ? ''
                     : <>
-                        <p>We found 2 results:</p><p>{this.state.listOfSongs[0].artist}</p>
+                        <SearchResults listOfSongs={this.state.listOfSongs} />
                     </>
                 }
             </main>
