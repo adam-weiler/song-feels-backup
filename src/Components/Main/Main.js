@@ -20,7 +20,9 @@ export default class Main extends Component {
     state = {
         searchInput: '',
         listOfSongs: '',
-        errorMessage: ''
+        errorMessage: '',
+        selectedSong: '',
+        songAnalysis: ''
     }
 
     handleSearchClick = (event) => {
@@ -46,6 +48,7 @@ export default class Main extends Component {
             axios.get(`/api/song_search/?q=${query}`)
             .then(response => {
                 console.log(response.data.songList);
+                // TODO: Replace /r/n with return, or . punctuation.
 
                 this.setState({
                     errorMessage: '',
@@ -55,10 +58,35 @@ export default class Main extends Component {
         }
     }
 
-    handleSongClick = (event) => {
+    handlePreviewClick = (event) => {
         event.preventDefault();
-        console.log('User clicked a song:', event.target);
+        console.log('User clicked preview a song:', event.target.id);
+        console.log('Song data:', this.state.listOfSongs[event.target.id]);
+
+        this.setState({
+            selectedSong: event.target.id
+        });
     }
+
+    handleAnalyzeClick = (event) => {
+        event.preventDefault();
+        console.log('User clicked a analyze a song:', this.state.selectedSong);
+        console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]);
+
+        let query = this.state.selectedSong;
+
+        axios.get(`/api/song_analyze/?q=${query}`)
+        .then(response => {
+            console.log(response.data);
+
+            // this.setState({
+            //     errorMessage: '',
+            //     listOfSongs: response.data.songList
+            // });
+        });
+    }
+
+    
 
     render() {
         return (
@@ -92,7 +120,17 @@ export default class Main extends Component {
                     !this.state.listOfSongs
                     ? ''
                     : <>
-                        <SearchResults listOfSongs={this.state.listOfSongs} />
+                        <SearchResults listOfSongs={this.state.listOfSongs} handlePreviewClick={this.handlePreviewClick} />
+                    </>
+                }
+
+                {
+                    !this.state.selectedSong
+                    ? ''
+                    : <>
+                    <p>"{this.state.listOfSongs[this.state.selectedSong]['lyrics']}"</p>
+                    <Button variant="primary" onClick={this.handleAnalyzeClick}>Analyze</Button>
+                        {/* <AnalysisResults  /> */}
                     </>
                 }
             </main>

@@ -16,7 +16,7 @@ function App() {
                 <h1>SongFeels</h1>
             </header>
             <Main />
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }

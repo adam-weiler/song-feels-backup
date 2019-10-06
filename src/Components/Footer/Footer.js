@@ -23,7 +23,7 @@ export default class Footer extends Component {
 
     render() {
         return (
-            <footer>
+            <footer className='footer'>
                 <ul>
                     <li>
                         <a href='https://adam-weiler.com' target='_blank'>

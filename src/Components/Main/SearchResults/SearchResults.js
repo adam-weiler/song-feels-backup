@@ -5,13 +5,8 @@ import React, { Component } from 'react';
 // import axios from 'axios';
 
 // Bootstrap-React components:
-import Col from 'react-bootstrap/Col';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Row from 'react-bootstrap/Row';
-import Tab from 'react-bootstrap/Tab';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
-// import Jumbotron from 'react-bootstrap/Jumbotron';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 // Call stylesheet last:
 import './SearchResults.css';
@@ -23,7 +18,9 @@ export default class SearchResults extends Component {
 
         if (this.props.listOfSongs) {
             jsonElements = this.props.listOfSongs.map(
-                (elem, id) => <li key={elem.song_id} onClick="">{elem.title} by {elem.artist}</li>
+                (elem, id) => <li key={elem.song_id}>
+                    "{elem.title}" by <em>{elem.artist}</em>&nbsp;<Button id={id} variant="secondary" onClick={this.props.handlePreviewClick}>Preview</Button>
+                </li>
             )
         }
 
@@ -37,8 +34,11 @@ export default class SearchResults extends Component {
                     this.props.listOfSongs.length < 1
                     ? <h3>Please try again!</h3>
                     : <ul>
-                        {jsonElements}
+                            {jsonElements}
                     </ul>
+
+
+                    // <Form.Check type="checkbox" label="Ignore Repeated Words" />
                 }
 
                 
