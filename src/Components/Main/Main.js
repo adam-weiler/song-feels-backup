@@ -47,12 +47,12 @@ export default class Main extends Component {
 
             axios.get(`/api/song_search/?q=${query}`)
             .then(response => {
-                console.log(response.data.songList);
+                console.log(response.data.lyrics);
                 // TODO: Replace /r/n with return, or . punctuation.
 
                 this.setState({
                     errorMessage: '',
-                    listOfSongs: response.data.songList
+                    listOfSongs: response.data.lyrics
                 });
             });
         }
@@ -97,7 +97,7 @@ export default class Main extends Component {
                 <Form>
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
-                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='House of the Rising Sun'/>
+                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='Going Under'/>
                     </Form.Group>
 
                     {
