@@ -8,7 +8,7 @@ common_words = ['a', 'ah', 'about', 'above', 'across', 'after', 'again', 'ago', 
 
 # TODO:
 # Need to remove -ing, -ly suffixes. (But only some of them..)
-# ie: act is a valid word, but actting is not.
+# ie: act is a valid word, but acting is not.
 # ie: drive is a valid word, but driving is not.
 # ie: false is a valid word, but falsely is not.
 # ie: fool is a valid word, but fooling is not.
