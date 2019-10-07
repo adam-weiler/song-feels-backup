@@ -97,7 +97,7 @@ export default class Main extends Component {
                 <Form>
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
-                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='TEMPORARY'/>
+                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='House of the Rising Sun'/>
                     </Form.Group>
 
                     {
