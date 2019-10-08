@@ -148,14 +148,14 @@ class SongView(View):
                 'api_token' : audd_key
             }
             response = requests.post(f'https://api.audd.io/findLyrics/?{query}', data=data)
-            body = json.loads(response.content)
-            # print(body)
-            print (body['result'])
-            # print (body['result'][0])
-            # print (body['result'][0]['lyrics'])
+            self.body = json.loads(response.content)
+            # print(self.body)
+            print (self.body['result'])
+            # print (self.body['result'][0])
+            # print (self.body['result'][0]['lyrics'])
             print('Success!')
             return JsonResponse({
-                'lyrics': body['result']
+                'lyrics': self.body['result']
             })
         except:
             print('Failure!')
@@ -477,14 +477,23 @@ class AnalyzeView(View):
     def get(self, request): # Switch back to this
     # def get(self):  # For testing only.
         print('\n***AnalyzeView - get***')
-        # query = request.GET.urlencode()
-        query = 4
+
+        # print(request)
+
+        query = request.GET.urlencode()
+        print(query)
+        # query = int(query, 2)
+        query = 0
+        print(query)
+        # query = 4
+        
+        print(type(query))
         print(query)
 
         # These all work:
         # print(new_song_search)
         # print()
-        # print(new_song_search.body)
+        print(new_song_search.body)
         # print()
         # print(new_song_search.body['result'])
         # print()
@@ -492,7 +501,7 @@ class AnalyzeView(View):
         # print()
         # print(new_song_search.body['result'][query]['lyrics'])
 
-        self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])
+        # self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])  # I need this!
 
 
         print('\n\n***AnalyzeView - get (again)***')

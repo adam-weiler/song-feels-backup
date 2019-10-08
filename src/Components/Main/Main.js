@@ -54,6 +54,9 @@ export default class Main extends Component {
                     errorMessage: '',
                     listOfSongs: response.data.lyrics
                 });
+            })
+            .catch(error => {
+                console.log('Error', error)
             });
         }
     }
@@ -74,16 +77,22 @@ export default class Main extends Component {
         console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]);
 
         let query = this.state.selectedSong;
+        console.log('query', query)
 
         axios.get(`/api/song_analyze/?q=${query}`)
         .then(response => {
+            console.log('Then statement.')
             console.log(response.data);
 
             // this.setState({
             //     errorMessage: '',
             //     listOfSongs: response.data.songList
             // });
+        })
+        .catch(error => {
+            console.log('Error', error)
         });
+        console.log('Well thats over with!')
     }
 
     
