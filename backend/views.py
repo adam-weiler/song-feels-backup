@@ -39,6 +39,14 @@ from django.views.generic import View
     # index = never_cache(TemplateView.as_view(template_name='index.html'))
 
 
+# These are for Django REST framework - Authentication.
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+
 # SongFeels imports
 from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 from backend.special_words import special_words  # A list of special words that can be safely ignored since they are not actually part of the lyrics.
@@ -96,6 +104,10 @@ class ApiView(View):
 
 class SongView(View):
 
+    # These are for Django REST framework - Authentication.
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def __init__(self):
         self.body = ''
 
@@ -127,6 +139,7 @@ class SongView(View):
         # })
 
     def get(self, request): # Switch back to this
+
     # def get(self):  # For testing only.
         print('\n***SongView - get***')
         print(request)
@@ -224,10 +237,10 @@ class AnalyzeView(View):
         return 'The AnalyzeView object.'
 
 
-    def getVADaverages(self):
+    def getVADaverages(self, vad_lyrics):
         print('\n***AnalyzeView - getVADaverages***')
         # count = 0
-        word_count = len(self.vad_lyrics)
+        word_count = len(vad_lyrics)
         # v_mean_sum__average = 0
         # a_mean_sum__average = 0
         # d_mean_sum__average = 0
@@ -258,6 +271,8 @@ class AnalyzeView(View):
 
             # vad__total += abs(v_mean_sum__sum) + abs(a_mean_sum__sum) + abs(d_mean_sum__sum)  # Total valence, arousal, and dominance.  Ignores negative sign.
 
+        print ('v_mean_sum__sum', v_mean_sum__sum)
+        print ('word count', word_count)
         
         v_mean_sum__average = v_mean_sum__sum / word_count  # average = Total values / words in lyrics.
         a_mean_sum__average = a_mean_sum__sum / word_count
@@ -302,6 +317,8 @@ class AnalyzeView(View):
 
 
         # return 42
+
+
         
 
     # def whichEmotionSpecific(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
@@ -467,7 +484,7 @@ class AnalyzeView(View):
 
         # print(self.vad_lyrics) word, v_mean_sum, a_mean_sum, d_mean_sum, emotionBasic
 
-        self.vad_averages = self.getVADaverages()  
+        self.vad_averages = self.getVADaverages(self.vad_lyrics)  
 
 
 
@@ -483,12 +500,12 @@ class AnalyzeView(View):
         query = request.GET.urlencode()
         print(query)
         # query = int(query, 2)
-        query = 0
-        print(query)
-        # query = 4
+        # query = 0
+        # print(query)
+        # # query = 4
         
-        print(type(query))
-        print(query)
+        # print(type(query))
+        # print(query)
 
         # These all work:
         # print(new_song_search)
@@ -502,7 +519,7 @@ class AnalyzeView(View):
         # print(new_song_search.body['result'][query]['lyrics'])
 
         # self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])  # I need this!
-
+        self.analyzeLyrics(query)
 
         print('\n\n***AnalyzeView - get (again)***')
         print('\nFiltered_lyrics:', len(self.filtered_lyrics), self.filtered_lyrics)

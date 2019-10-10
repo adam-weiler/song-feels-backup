@@ -5,6 +5,7 @@ import React, { Component, useState } from 'react';
 import axios from 'axios';
 
 // Smaller components:
+import AnalyzedResults from './AnalyzedResults/AnalyzedResults.js';
 import SearchResults from './SearchResults/SearchResults.js';
 
 // Bootstrap-React components:
@@ -74,15 +75,20 @@ export default class Main extends Component {
     handleAnalyzeClick = (event) => {
         event.preventDefault();
         console.log('User clicked a analyze a song:', this.state.selectedSong);
-        console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]);
+        console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]['lyrics']);
 
-        let query = this.state.selectedSong;
+        // let query = this.state.selectedSong;
+        let query = this.state.listOfSongs[this.state.selectedSong]['lyrics'];
         console.log('query', query)
 
         axios.get(`/api/song_analyze/?q=${query}`)
         .then(response => {
             console.log('Then statement.')
             console.log(response.data);
+
+            this.setState({
+                songAnalysis: response.data
+            })
 
             // this.setState({
             //     errorMessage: '',
@@ -104,9 +110,10 @@ export default class Main extends Component {
             <main className='jumbotron jumbotron-fluid'>
                 {/* <Form noValidate validated={validated}> */}
                 <Form>
+                    {/* {% csrf_token %} */}
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
-                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='Going Under'/>
+                        <Form.Control type='text' name='songInput' placeholder='Song name' required value='Sober'/>
                     </Form.Group>
 
                     {
@@ -140,6 +147,15 @@ export default class Main extends Component {
                     <p>"{this.state.listOfSongs[this.state.selectedSong]['lyrics']}"</p>
                     <Button variant="primary" onClick={this.handleAnalyzeClick}>Analyze</Button>
                         {/* <AnalysisResults  /> */}
+                    </>
+                }
+
+                {
+                    !this.state.songAnalysis
+                    ? ''
+                    : <>
+                        <AnalyzedResults songAnalysis={this.state.songAnalysis} />
+                        {/* {this.state.analyzedResults.emotions_percent} */}
                     </>
                 }
             </main>
