@@ -31,6 +31,7 @@ export default class Footer extends Component {
                         </a> 
                         &nbsp; Developed by <a href='https://adam-weiler.com' target='_blank'>Adam Weiler</a> ©2019</li>
                     <li>
+                        Lyrics API: &nbsp;
                         <a href='https://audd.io/' target='_blank'>
                             <img src={audd_logo} border='0' alt='Our app powered by AudD Music Recognition API.' />
                         </a>

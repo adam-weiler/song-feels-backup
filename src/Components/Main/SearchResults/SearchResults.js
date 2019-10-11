@@ -24,7 +24,6 @@ export default class SearchResults extends Component {
             )
         }
 
-
         return (
             <>
                 <br/>
@@ -37,11 +36,8 @@ export default class SearchResults extends Component {
                             {jsonElements}
                     </ul>
 
-
                     // <Form.Check type="checkbox" label="Ignore Repeated Words" />
                 }
-
-                
             </>
         )
     }
