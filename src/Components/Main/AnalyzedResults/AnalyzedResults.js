@@ -68,6 +68,14 @@ export default class AnalyzedResults extends Component {
             );
         }
 
+// hand-rock
+
+// theater-masks
+
+// smile
+
+// bolt
+
         return (
             <>
                 <br/>
@@ -76,7 +84,8 @@ export default class AnalyzedResults extends Component {
                     ? <h3>Please try again!</h3>
                     : 
                     <>
-                        <h2>The song has been evaluated to display these emotions:</h2><br/>
+                        <h2>The song has been evaluated to display these emotions:</h2>
+                        (List length of original song)<br/>
                         (infobox)
                         <ul>
                                 <Table borderless responsive>

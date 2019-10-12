@@ -88,18 +88,18 @@ class FrontendAppView(View):
             )
 
 
-class ApiView(View):
+# class ApiView(View):
 
-    def get(self, request):
-        return JsonResponse({
-            "def get": "This is a get request."
-        })
+#     def get(self, request):
+#         return JsonResponse({
+#             "def get": "This is a get request."
+#         })
 
-    @csrf_exempt
-    def post(self, request):
-        return JsonResponse({
-            "def post": "This is a post request."
-        })
+#     @csrf_exempt
+#     def post(self, request):
+#         return JsonResponse({
+#             "def post": "This is a post request."
+#         })
 
 
 class SongView(View):
@@ -111,33 +111,6 @@ class SongView(View):
     def __init__(self):
         self.body = ''
 
-    def callLyricsAPI(self, request):
-        print('\n***SongView - callLyricsAPI***')
-        # Makes a call to AudD API and returns lyrics.
-
-        # print(f'https://api.audd.io/findLyrics/?{request}')
-
-        # try:
-        #     data = {
-        #         'api_token' : audd_key
-        #     }
-        #     response = requests.post(f'https://api.audd.io/findLyrics/?{request}', data=data)
-        #     body = json.loads(response.content)
-        #     # print(body)
-        #     # print (body['result'])
-        #     print (body['result'][0])
-        #     # print (body['result'][0]['lyrics'])
-        #     print('Success!')
-        #     return JsonResponse({
-        #         'lyrics': body['result']
-        #     })
-        # except:
-        #     print('Failure!')
-        #     return JsonResponse({
-        #         'error': response.status_code,
-        #         'message': 'Something went wrong!'
-        # })
-
     def get(self, request): # Switch back to this
 
     # def get(self):  # For testing only.
@@ -145,14 +118,6 @@ class SongView(View):
         print(request)
         query = request.GET.urlencode()
         # print(query)
-
-        # self.title = 'The Rising Sun Blues'
-
-                # api_result = self.callLyricsAPI(query)
-                # print(api_result)
-                # return JsonResponse({
-                #     'api_result': api_result
-                # }) 
 
         print(f'https://api.audd.io/findLyrics/?{query}')
 
@@ -177,31 +142,6 @@ class SongView(View):
                 'message': 'Something went wrong!'
         })
 
-
-
-
-
-
-
-        self.unfiltered_lyrics = "There is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one\r\n \r\n My mother was a tailor\r\n She sewed my new bluejeans\r\n My father was a gamblin' man\r\n Down in New Orleans\r\n \r\n Now the only thing a gambler needs\r\n Is a suitcase and trunk\r\n And the only time he's satisfied\r\n Is when he's on a drunk\r\n \r\n [Organ Solo]\r\n \r\n Oh mother tell your children\r\n Not to do what I have done\r\n Spend your lives in sin and misery\r\n In the House of the Rising Sun\r\n \r\n Well, I got one foot on the platform\r\n The other foot on the train\r\n I'm goin' back to New Orleans\r\n To wear that ball and chain\r\n \r\n Well, there is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one" # 
-
-        singer = 'animals'
-        song = 'rising sun'
-
-        # happy, Excited, fear, sad, anger, bored
-        self.body = {"status":"success","result":[
-        {"song_id": "87427", "artist_id": "24716", "title": "The House of the Rising Sun", "title_with_featured": "The House of the Rising Sun", "full_title": "The House of the Rising Sun by\xa0The\xa0Animals", "artist": "The Animals", "lyrics": "There is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one\r\n \r\n My mother was a tailor\r\n She sewed my new bluejeans\r\n My father was a gamblin' man\r\n Down in New Orleans\r\n \r\n Now the only thing a gambler needs\r\n Is a suitcase and trunk\r\n And the only time he's satisfied\r\n Is when he's on a drunk\r\n \r\n [Organ Solo]\r\n \r\n Oh mother tell your children\r\n Not to do what I have done\r\n Spend your lives in sin and misery\r\n In the House of the Rising Sun\r\n \r\n Well, I got one foot on the platform\r\n The other foot on the train\r\n I'm goin' back to New Orleans\r\n To wear that ball and chain\r\n \r\n Well, there is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one", "media": "[{'provider':'apple_music','provider_id':'1108150799','type':'audio','url':'https:\\/\\/itunes.apple.com\\/lookup?entity=song&id=1108150799'},{'native_uri':'spotify:track:61Q9oJNd9hJQFhSDh6Qlap','provider':'spotify','type':'audio','url':'https:\\/\\/open.spotify.com\\/track\\/61Q9oJNd9hJQFhSDh6Qlap'},{'provider':'youtube','start':0,'type':'video','url':'http:\\/\\/www.youtube.com\\/watch?v=0sB3Fjw3Uvc'}]"},
-        
-        {"song_id":"2332455","artist_id":"2300","title":"Hello","title_with_featured":"Hello","full_title":"Hello by Adele","artist":"Adele","lyrics":"[Verse 1]\r\n Hello, it's me\r\n I was wondering if after all these years you'd like to meet\r\n To go over everything\r\n They say that time's supposed to heal ya, but I ain't done much healing\r\n Hello, can you hear me?\r\n I'm in California dreaming about who we used to be\r\n When we were younger and free\r\n I've forgotten how it felt before the world fell at our feet\r\n There's such a difference between us\r\n And a million miles\r\n \r\n [Chorus]\r\n Hello from the other side\r\n I must've called a thousand times\r\n To tell you I'm sorry\r\n For everything that I've done\r\n But when I call, you never seem to be home\r\n Hello from the outside\r\n At least I can say that I've tried\r\n To tell you I'm sorry, for breaking your heart\r\n But it don't matter\r\n It clearly doesn't tear you apart anymore\r\n \r\n [Verse 2]\r\n Hello, how are you?\r\n It's so typical of me to talk about myself, I'm sorry\r\n I hope that you're well\r\n Did you ever make it out of that town where nothing ever happened?\r\n It's no secret that the both of us\r\n Are running out of time\r\n [Chorus]\r\n So hello from the other side\r\n I must've called a thousand times\r\n To tell you I'm sorry\r\n For everything that I've done\r\n But when I call, you never seem to be home\r\n Hello from the outside\r\n At least I can say that I've tried\r\n To tell you I'm sorry, for breaking your heart\r\n But it don't matter\r\n It clearly doesn't tear you apart anymore\r\n \r\n [Bridge]\r\n (Highs, highs, highs, highs, lows, lows, lows, lows)\r\n Ooh, anymore\r\n (Highs, highs, highs, highs, lows, lows, lows, lows)\r\n Ooh, anymore\r\n (Highs, highs, highs, highs, lows, lows, lows, lows)\r\n Ooh, anymore\r\n (Highs, highs, highs, highs, lows, lows, lows, lows)\r\n Anymore\r\n \r\n [Chorus]\r\n Hello from the other side\r\n I must've called a thousand times\r\n To tell you I'm sorry\r\n For everything that I've done\r\n But when I call, you never seem to be home\r\n Hello from the outside\r\n At least I can say that I've tried\r\n To tell you I'm sorry, for breaking your heart\r\n But it don't matter\r\n It clearly doesn't tear you apart anymore\r\n [Produced by Greg Kurstin]\r\n [Music Video]","media":"[{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=YQHsXMglC9A\"},{\"provider\":\"apple_music\",\"provider_id\":\"1051394215\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=1051394215\"},{\"native_uri\":\"spotify:track:0ENSn4fwAbCGeFGVUbXEU3\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/0ENSn4fwAbCGeFGVUbXEU3\"},{\"provider\":\"soundcloud\",\"type\":\"audio\",\"url\":\"https:\\/\\/soundcloud.com\\/adelemusic\\/hello\"}]"},
-        
-        {"song_id":"12345","artist_id":"12345","title":"Wake Me Up Before You Go Go","title_with_featured":"Wake Me Up Before You Go Go","full_title":"Wake Me Up Before You Go Go by Wham!","artist":"Wham!","lyrics":"Jitterbug Jitterbug Jitterbug Jitterbug You put the boom boom into my heart (hoo, hoo) You send my soul sky high when your lovin' starts Jitterbug into my brain (yeah, yeah) Goes a bang-bang-bang 'til my feet do the same But something's bugging you (ha-ha, ha-ha) Something ain't right (ha-ha, ha-ha) My best friend told me what you did last night (ha-ha, ha-ha) Left me sleepin' in my bed (ha-ha, ha-ha) I was dreaming, but I should have been with you instead (ha-ha) Wake me up before you go-go Don't leave me hanging on like a yo-yo Wake me up before you go-go I don't want to miss it when you hit that high Wake me up before you go-go 'Cause I'm not plannin' on going solo Wake me up before you go-go Take me dancing tonight I wanna hit that high (yeah, yeah) You take the grey skies out of my way (hoo, hoo) You make the sun shine brighter than Doris Day Turned a bright spark into a flame (yeah, yeah) My beats per minute never been the same 'Cause you're my lady, I'm your fool (ha-ha, ha-ha) It makes me crazy when you act so cruel (ha-ha, ha-ha) Come on, baby, let's not fight (ha-ha, ha-ha) We'll go dancing, everything will be all right (ha-ha) Wake me up before you go-go Don't leave me hanging on like a yo-yo Wake me up before you go-go I don't want to miss it when you hit that high Wake me up before you go-go 'Cause I'm not plannin' on going solo Wake me up before you go-go Take me dancing tonight I wanna hit that high (yeah, yeah, yeah) Jitterbug (baby) Jitterbug (woo) Cuddle up, baby, move in tight We'll go dancing tomorrow night It's cold out there, but it's warm in bed They can dance, we'll stay home instead Jitterbug Wake me up before you go-go Don't leave me hanging on like a yo-yo Wake me up before you go-go I don't want to miss it when you hit that high Wake me up before you go-go 'Cause I'm not plannin' on going solo Wake me up before you go-go Take me dancing tonight Wake me up before you go-go (don't you dare) Don't leave me hanging on like a yo-yo (Leave me hanging on like a yo-yo, yo-yo, yo) Wake me up before you go-go I don't want to miss it when you hit that high (Take me dancing) (A boom-boom-boom-boom, oh) Wake me up before you go-go 'Cause I'm not plannin' on going solo (A boom-boom-boom-boom) Wake me up before you go-go (ah) (Yeah, yeah, yeah) Take me dancing tonight Ooh ah Yeah","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"12345\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=12345\"},{\"native_uri\":\"spotify:track:12345\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/12345\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=12345\"}]"},
-        {"song_id":"23456","artist_id":"23456","title":"I'm So Excited","title_with_featured":"I'm So Excited","full_title":"I'm So Excited by The Pointer Sisters","artist":"The Pointer Sisters","lyrics":"Tonight's the night we're gonna make it happen Tonight we'll put all other things aside Give in this time and show me some affection We're goin' for those pleasures in the night I want to love you, feel you Wrap myself around you I want to squeeze you, please you I just can't get enough And if you move real slow, I'll let it go I'm so excited, and I just can't hide it I'm about to lose control and I think I like it I'm so excited, and I just can't hide it And I know, I know, I know, I know, I know I want you We shouldn't even think about tomorrow Sweet memories will last a long, long time We'll have a good time, baby, don't you worry And if we're still playin' around, boy, that's just fine Let's get excited, we just can't hide it I'm about to lose control and I think I like it I'm so excited and I just can't hide it And I know, I know, I know, I know, I know I want you, I want you Oh boy, I want to love you, feel you Wrap myself around you I want to squeeze you, please you I just can't get enough And if you move real slow, I'll let it go I'm so excited, and I just can't hide it I'm about to lose control and I think I like it I'm so excited, and I just can't hide it And I know, I know, I know, I know, I know I want you I'm so excited (look what you do to me), and I just can't hide it (you got me burning up) I'm about to lose control and I think I like it (yeah) I'm so excited (how did you get to me?), and I can't deny, no, no, no (I've got to give it up) (Oh, oh, oh, oh)I know, I know, that I want you I'm so excited (look what you do to me), oh boy (you got me burning up) (Oh, oh, oh, oh) Hey, hey I think I like it (yeah) I'm so excited (how did you get to me?), you got me (I've got to give it up) (Oh, oh, oh, oh) Oh, ooh I like it boy I'm so excited (look what you do to me), oh, you got me burning up (burning up) (Oh, oh, oh, oh, ow)","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"23456\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=23456\"},{\"native_uri\":\"spotify:track:23456\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/23456\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=23456\"}]"},
-        {"song_id":"34567","artist_id":"34567","title":"The End","title_with_featured":"The End","full_title":"The End by The Doors","artist":"The Doors","lyrics":"[Intro] [Chorus] This is the end Beautiful friend This is the end My only friend The end [Verse 1] Of our elaborate plans, the end Of everything that stands, the end No safety or surprise, the end I'll never look into your eyes again [Verse 2] Can you picture what will be? So limitless and free Desperately in need Of some stranger's hand In a desperate land [Verse 3] Lost in a Roman wilderness of pain And all the children are insane All the children are insane Waiting for the summer rain, yeah [Verse 4] There's danger on the edge of town Ride the King's Highway, baby Weird scenes inside the gold mine Ride the highway west, baby Ride the snake, ride the snake To the lake, the ancient lake, baby The snake, he's long, seven miles Ride the snake He's old and his skin is cold The west is the best The west is the best Get here and we'll do the rest The blue bus is calling us The blue bus is calling us Driver, where you taking us? [Verse 5] The killer awoke before dawn He put his boots on He took a face from the ancient gallery And he walked on down the hall He went into the room where his sister lived, and then he Paid a visit to his brother, and then he He walked on down the hall, and And he came to a door And he looked inside 'Father?' 'Yes, son?' 'I want to kill you' 'Mother? I want to...' [Bridge] Come on baby, take a chance with us Come on baby, take a chance with us Come on baby, take a chance with us And meet me at the back of the blue bus Of the blue bus, on the blue bus, on the blue bus Come on yeah Fuck, fuck Fuck fuck, fuck, fuck Come on baby, fuck me baby yeah Fuck fuck fuck fuck fuck Come on baby, fuck me baby Fuck fuck fuck fuck fuck Come on Fuck fuck Alright Fuck fuck Kill, kill, kill, kill [Chorus] This is the end Beautiful friend This is the end My only friend, the end [Verse 6] It hurts to set you free But you'll never follow me The end of laughter and soft lies The end of nights we tried to die This is the end","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"34567\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=34567\"},{\"native_uri\":\"spotify:track:34567\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/34567\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=34567\"}]"},
-        {"song_id":"45678","artist_id":"45678","title":"When the Party's over","title_with_featured":"When the Party's over","full_title":"When the Party's over by Billie Eilish","artist":"Billie Eilish","lyrics":"Don't you know I'm no good for you? I've learned to lose you, can't afford to Tore my shirt to stop you bleedin' But nothin' ever stops you leavin' Quiet when I'm coming home and I'm on my own I could lie, say I like it like that, like it like that I could lie, say I like it like that, like it like that Don't you know too much already? I'll only hurt you if you let me Call me friend but keep me closer (call me back) And I'll call you when the party's over Quiet when I'm coming home and I'm on my own And I could lie, say I like it like that, like it like that Yeah, I could lie, say I like it like that, like it like that But nothing is better sometimes Once we've both said our goodbyes Let's just let it go Let me let you go Quiet when I'm coming home and I'm on my own I could lie, say I like it like that, like it like that I could lie, say I like it like that, like it like that","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"45678\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=45678\"},{\"native_uri\":\"spotify:track:45678\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/45678\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=45678\"}]"},
-        {"song_id":"56789","artist_id":"56789","title":"Break Stuff","title_with_featured":"Break Stuff","full_title":"Break Stuff by Limp Bizkit","artist":"Limp Bizkit","lyrics":"Its just one of those days Where you don't want to wake up Everything is fucked Everybody sucks You don't really know why But you want to justify Rippin' someone's head off No human contact And if you interact Your life is on contract Your best bet is to stay away motherfucker It's just one of those days It's all about the he-says, she-says bullshit I think you better quit, let the shit slip Or you'll be leaving with a fat lip It's all about the he-says, she-says bullshit I think you better quit, talking that shit Its just one of those days Feeling like a freight train First one to complain Leaves with a bloodstain Damn right I'm a maniac You better watch your back Cause I'm fucking up your program And then your stuck up You just lucked up Next in line to get fucked up Your best bet is to stay away motherfucker It's just one of those days It's all about the he-says, she-says bullshit I think you better quit, let the shit slip Or you'll be leaving with a fat lip It's all about the he-says, she-says bullshit I think you better quit, talking that shit Punk, so come and get it I feel like shit My suggestion, is to keep your distance Cause right now I'm dangerous We've all felt like shit And been treated like shit All those motherfuckers That want to step up I hope you know, I pack a chainsaw I'll skin your ass raw And if my day keeps going this way, I just might Break something tonight I pack a chainsaw I'll skin your ass raw And if my day keeps going this way, I just might Break something tonight I pack a chainsaw I'll skin your ass raw And if my day keeps going this way, I just might Break your fucking face tonight Give me something to break Just give me something to break How bout yer fucking face I hope you know, I pack a chainsaw What! A chainsaw What! A motherfucking chainsaw What! So come and get it It's all about the he-says, she-says bullshit I think you better quit, let the shit slip Or you'll be leaving with a fat lip It's all about the he-says, she-says bullshit I think you better quit, talking that shit Punk, so come and get it","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"56789\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=56789\"},{\"native_uri\":\"spotify:track:56789\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/56789\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=56789\"}]"},
-        {"song_id":"67890","artist_id":"67890","title":"Copperline","title_with_featured":"Copperline","full_title":"Copperline by James Taylor","artist":"James Taylor","lyrics":"Even the old folks never knew Why they call it like they do I was wonderin' since the age of two Down on Copperline Copperhead, copper beech Copper kettles sitting side by each Copper coil, cup o' Georgia peach Down on Copperline Half a mile down to Morgan Creek Leanin' heavy on the end of the week Hercules and a hog-nosed snake Down on Copperline We were down on Copperline One summer night on the Copperline Slip away past supper time Wood smoke and moonshine Down on Copperline One time I saw my daddy dance Watched him moving like a man in a trance He brought it back from the war in France Down onto Copperline Branch water and tomato wine Creosote and turpentine Sour mash and new moon shine Down on Copperline, down on Copperline First kiss, ever I took Like a page from a romance book The sky opened and the earth shook Down on Copperline, down on Copperline, yeah Took a fall from a windy height I only knew how to hold on tight And pray for love enough to last all night Down on Copperline Day breaks and the boy wakes up And the dog barks and the birds sings And the sap rises and the angels sigh, yeah I tried to go back as if I could All spec house and plywood Tore up, tore up good Down on Copperline It doesn't come as a surprise to me It doesn't touch my memory Man, I'm lifting up and rising free Down over Copperline Half a mile down to Morgan Creek I'm only living for the end of the week Hercules and a hog-nosed snake Down on Copperline, yeah Take me down on Copperline Ohhh, down on Copperline Take me down on Copperline","media":"[{\"provider\":\"apple_music\",\"provider_id\":\"67890\",\"type\":\"audio\",\"url\":\"https:\\/\\/itunes.apple.com\\/lookup?entity=song\u0026id=67890\"},{\"native_uri\":\"spotify:track:67890\",\"provider\":\"spotify\",\"type\":\"audio\",\"url\":\"https:\\/\\/open.spotify.com\\/track\\/67890\"},{\"provider\":\"youtube\",\"start\":0,\"type\":\"video\",\"url\":\"http:\\/\\/www.youtube.com\\/watch?v=67890\"}]"}
-        ]}
-
         # new_song.title = query
         # print(new_song)
         # new_song.analyzeLyrics()
@@ -222,7 +162,7 @@ class AnalyzeView(View):
 
     def __init__(self):
         self.title = ''
-        # self.unfiltered_lyrics = ''  # The original lyrics from the API.
+        self.unfiltered_lyrics = ''  # The original lyrics from the API.
         self.filtered_lyrics = []  # The data-cleaned lyrics for the song.
         self.vad_lyrics = []  # Only the lyrics that appeared in the VAD database.
 
@@ -490,36 +430,50 @@ class AnalyzeView(View):
 
         # return ""
 
-
-    def get(self, request): # Switch back to this
+    def post(self, request): # Trying this for a second.
+    # def get(self, request): # Switch back to this
     # def get(self):  # For testing only.
         print('\n***AnalyzeView - get***')
-
         # print(request)
+        # print(request.body)
+        # print(json.loads(request.body.decode('utf-8')))
 
-        query = request.GET.urlencode()
-        print(query)
-        # query = int(query, 2)
-        # query = 0
-        # print(query)
-        # # query = 4
+        post_data = json.loads(request.body.decode('utf-8'))
         
-        # print(type(query))
-        # print(query)
+        self.unfiltered_lyrics = post_data['original_lyrics']
+        print(self.unfiltered_lyrics)
 
-        # These all work:
-        # print(new_song_search)
-        # print()
-        print(new_song_search.body)
-        # print()
-        # print(new_song_search.body['result'])
-        # print()
-        # print(new_song_search.body['result'][query])
-        # print()
-        # print(new_song_search.body['result'][query]['lyrics'])
+            # post_data = request.session.get('post_data')
+            # print('Post_data', post_data)
 
-        # self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])  # I need this!
-        self.analyzeLyrics(query)
+            # print('/n/n')
+            
+
+            # query = request.GET.urlencode()
+            # print(query)
+            # query = int(query, 2)
+            # query = 0
+            # print(query)
+            # # query = 4
+            
+            # print(type(query))
+            # print(query)
+
+            # These all work:
+            # print(new_song_search)
+            # print()
+            # print(new_song_search.body)
+            # print()
+            # print(new_song_search.body['result'])
+            # print()
+            # print(new_song_search.body['result'][query])
+            # print()
+            # print(new_song_search.body['result'][query]['lyrics'])
+
+            # self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])  # I need this!
+
+
+        self.analyzeLyrics(self.unfiltered_lyrics)
 
         print('\n\n***AnalyzeView - get (again)***')
         print('\nFiltered_lyrics:', len(self.filtered_lyrics), self.filtered_lyrics)
@@ -537,15 +491,13 @@ class AnalyzeView(View):
             'emotions_percent': self.emotions__percent
         })
     
-
-
 new_song_search = SongView() 
 new_analysis = AnalyzeView()
 
 
 ##These are for testing only.
 # new_song_search.get() # User searches for a song.  ***SongView - get***
-                            # Calls AuDD API:            ***SongView - callLyricsAPI***
+                        # Calls AuDD API:            ***SongView - get***
 
 # new_analysis.get()    # User analyzes a song.         ***AnalyzeView - get***
                             # Calls smaller functions.   ***AnalyzeView - analyzeLyrics***
@@ -577,9 +529,3 @@ new_analysis = AnalyzeView()
 # print(len(new_song.vad_lyrics))
 # print(new_song.vad_lyrics)
 
-
-# print(SongView.get(ThisSong, 'GET'))
-
-# print(common_words)
-
-# print(new_song.get('animals'))

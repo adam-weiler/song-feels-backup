@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react';
 
 // Third-party libraries:
 import axios from 'axios';
+// import CSRFToken from './csrftoken';
 
 // Smaller components:
 import AnalyzedResults from './AnalyzedResults/AnalyzedResults.js';
@@ -17,373 +18,22 @@ import Form from 'react-bootstrap/Form';
 // Call stylesheet last:
 import './Main.css';
 
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 export default class Main extends Component {
     state = {
         searchInput: '',
-        listOfSongs: '',
+        listOfSongs: '',  // Switch this back
+
+        // listOfSongs: [{'song_id': '87427', 'artist_id': '24716', 'title': 'The House of the Rising Sun', 'title_with_featured': 'The House of the Rising Sun', 'full_title': 'The House of the Rising Sun by\xa0The\xa0Animals', 'artist': 'The Animals', 'lyrics': "There is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one\r\n \r\n My mother was a tailor\r\n She sewed my new bluejeans\r\n My father was a gamblin' man\r\n Down in New Orleans\r\n \r\n Now the only thing a gambler needs\r\n Is a suitcase and trunk\r\n And the only time he's satisfied\r\n Is when he's on a drunk\r\n \r\n [Organ Solo]\r\n \r\n Oh mother tell your children\r\n Not to do what I have done\r\n Spend your lives in sin and misery\r\n In the House of the Rising Sun\r\n \r\n Well, I got one foot on the platform\r\n The other foot on the train\r\n I'm goin' back to New Orleans\r\n To wear that ball and chain\r\n \r\n Well, there is a house in New Orleans\r\n They call the Rising Sun\r\n And it's been the ruin of many a poor boy\r\n And God I know I'm one", 'media': '[{"provider":"apple_music","provider_id":"1108150799","type":"audio","url":"https:\\/\\/itunes.apple.com\\/lookup?entity=song&id=1108150799"},{"native_uri":"spotify:track:61Q9oJNd9hJQFhSDh6Qlap","provider":"spotify","type":"audio","url":"https:\\/\\/open.spotify.com\\/track\\/61Q9oJNd9hJQFhSDh6Qlap"},{"provider":"youtube","start":0,"type":"video","url":"http:\\/\\/www.youtube.com\\/watch?v=0sB3Fjw3Uvc"}]'}], // For testing only.
+
         errorMessage: '',
         selectedSong: '',
         songAnalysis: ''  // Switch this back
         
         // songAnalysis: {  // For Testing only.
-        //     "filtered_lyrics": [
-        //       "bbridge",
-        //       "bchorus",
-        //       "boutro",
-        //       "bpre",
-        //       "bring",
-        //       "butler",
-        //       "bverse",
-        //       "c",
-        //       "called",
-        //       "can",
-        //       "center",
-        //       "chew",
-        //       "chorus",
-        //       "come",
-        //       "complicate",
-        //       "d",
-        //       "drink",
-        //       "elevate",
-        //       "empty",
-        //       "f",
-        //       "fall",
-        //       "find",
-        //       "finger",
-        //       "forever",
-        //       "fucking",
-        //       "has",
-        //       "imbecile",
-        //       "jesus",
-        //       "leave",
-        //       "liar",
-        //       "like",
-        //       "making",
-        //       "mary",
-        //       "mother",
-        //       "murder",
-        //       "must",
-        //       "past",
-        //       "path",
-        //       "pointing",
-        //       "promise",
-        //       "q",
-        //       "rests",
-        //       "s",
-        //       "shadow",
-        //       "shrouding",
-        //       "sleep",
-        //       "sober",
-        //       "son",
-        //       "stalking",
-        //       "start",
-        //       "step",
-        //       "t",
-        //       "take",
-        //       "things",
-        //       "trust",
-        //       "upon",
-        //       "waiting",
-        //       "want",
-        //       "whisper",
-        //       "whistle",
-        //       "will",
-        //       "won",
-        //       "work",
-        //       "worthless"
-        //     ],
-        //     "vad_lyrics": [
-        //       {
-        //         "word": "bring",
-        //         "v_mean_sum": 5.68,
-        //         "a_mean_sum": 4.29,
-        //         "d_mean_sum": 5.72,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "butler",
-        //         "v_mean_sum": 5.62,
-        //         "a_mean_sum": 2.55,
-        //         "d_mean_sum": 6.04,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "can",
-        //         "v_mean_sum": 6.41,
-        //         "a_mean_sum": 3.14,
-        //         "d_mean_sum": 6.44,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "center",
-        //         "v_mean_sum": 5.56,
-        //         "a_mean_sum": 2.62,
-        //         "d_mean_sum": 5.72,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "chew",
-        //         "v_mean_sum": 5.58,
-        //         "a_mean_sum": 3.8,
-        //         "d_mean_sum": 6.48,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "chorus",
-        //         "v_mean_sum": 6,
-        //         "a_mean_sum": 4.2,
-        //         "d_mean_sum": 5.26,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "come",
-        //         "v_mean_sum": 5.64,
-        //         "a_mean_sum": 3.57,
-        //         "d_mean_sum": 5.94,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "complicate",
-        //         "v_mean_sum": 3.3,
-        //         "a_mean_sum": 4.95,
-        //         "d_mean_sum": 4.52,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "drink",
-        //         "v_mean_sum": 6.67,
-        //         "a_mean_sum": 5.19,
-        //         "d_mean_sum": 5.87,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "elevate",
-        //         "v_mean_sum": 6.42,
-        //         "a_mean_sum": 4.65,
-        //         "d_mean_sum": 5.67,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "empty",
-        //         "v_mean_sum": 3.78,
-        //         "a_mean_sum": 2.25,
-        //         "d_mean_sum": 3.61,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "fall",
-        //         "v_mean_sum": 3.89,
-        //         "a_mean_sum": 4.24,
-        //         "d_mean_sum": 3.83,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "find",
-        //         "v_mean_sum": 6.45,
-        //         "a_mean_sum": 3.52,
-        //         "d_mean_sum": 6.24,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "finger",
-        //         "v_mean_sum": 5.8,
-        //         "a_mean_sum": 4.15,
-        //         "d_mean_sum": 5.32,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "fucking",
-        //         "v_mean_sum": 5.09,
-        //         "a_mean_sum": 6.86,
-        //         "d_mean_sum": 4.94,
-        //         "emotionBasic": "Anger"
-        //       },
-        //       {
-        //         "word": "imbecile",
-        //         "v_mean_sum": 3,
-        //         "a_mean_sum": 5.17,
-        //         "d_mean_sum": 3.12,
-        //         "emotionBasic": "Fear"
-        //       },
-        //       {
-        //         "word": "leave",
-        //         "v_mean_sum": 4.68,
-        //         "a_mean_sum": 4.48,
-        //         "d_mean_sum": 5.47,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "liar",
-        //         "v_mean_sum": 2.41,
-        //         "a_mean_sum": 6.6,
-        //         "d_mean_sum": 4.74,
-        //         "emotionBasic": "Anger"
-        //       },
-        //       {
-        //         "word": "like",
-        //         "v_mean_sum": 7.44,
-        //         "a_mean_sum": 4.4,
-        //         "d_mean_sum": 6.28,
-        //         "emotionBasic": "Happy"
-        //       },
-        //       {
-        //         "word": "mother",
-        //         "v_mean_sum": 7.53,
-        //         "a_mean_sum": 4.73,
-        //         "d_mean_sum": 6.11,
-        //         "emotionBasic": "Happy"
-        //       },
-        //       {
-        //         "word": "murder",
-        //         "v_mean_sum": 1.48,
-        //         "a_mean_sum": 6.24,
-        //         "d_mean_sum": 3.38,
-        //         "emotionBasic": "Fear"
-        //       },
-        //       {
-        //         "word": "must",
-        //         "v_mean_sum": 5.45,
-        //         "a_mean_sum": 4.1,
-        //         "d_mean_sum": 5.06,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "past",
-        //         "v_mean_sum": 5.09,
-        //         "a_mean_sum": 4.71,
-        //         "d_mean_sum": 5.18,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "path",
-        //         "v_mean_sum": 5.71,
-        //         "a_mean_sum": 3.74,
-        //         "d_mean_sum": 4.62,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "promise",
-        //         "v_mean_sum": 6.64,
-        //         "a_mean_sum": 3.9,
-        //         "d_mean_sum": 6.47,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "shadow",
-        //         "v_mean_sum": 5.07,
-        //         "a_mean_sum": 3.1,
-        //         "d_mean_sum": 4.41,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "sleep",
-        //         "v_mean_sum": 7.22,
-        //         "a_mean_sum": 3.6,
-        //         "d_mean_sum": 5.3,
-        //         "emotionBasic": "Happy"
-        //       },
-        //       {
-        //         "word": "sober",
-        //         "v_mean_sum": 5.95,
-        //         "a_mean_sum": 4.32,
-        //         "d_mean_sum": 6.86,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "son",
-        //         "v_mean_sum": 6.91,
-        //         "a_mean_sum": 4.43,
-        //         "d_mean_sum": 5,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "start",
-        //         "v_mean_sum": 6.41,
-        //         "a_mean_sum": 4.81,
-        //         "d_mean_sum": 5.5,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "step",
-        //         "v_mean_sum": 5.68,
-        //         "a_mean_sum": 3.48,
-        //         "d_mean_sum": 6,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "take",
-        //         "v_mean_sum": 4.82,
-        //         "a_mean_sum": 4.52,
-        //         "d_mean_sum": 4.83,
-        //         "emotionBasic": "Sad"
-        //       },
-        //       {
-        //         "word": "trust",
-        //         "v_mean_sum": 7.24,
-        //         "a_mean_sum": 4.3,
-        //         "d_mean_sum": 6.95,
-        //         "emotionBasic": "Happy"
-        //       },
-        //       {
-        //         "word": "want",
-        //         "v_mean_sum": 6,
-        //         "a_mean_sum": 5.29,
-        //         "d_mean_sum": 5.39,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "whisper",
-        //         "v_mean_sum": 6.14,
-        //         "a_mean_sum": 4.1,
-        //         "d_mean_sum": 5.66,
-        //         "emotionBasic": "Excited"
-        //       },
-        //       {
-        //         "word": "whistle",
-        //         "v_mean_sum": 5.7,
-        //         "a_mean_sum": 3.94,
-        //         "d_mean_sum": 5.78,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "will",
-        //         "v_mean_sum": 5.32,
-        //         "a_mean_sum": 2.9,
-        //         "d_mean_sum": 6.61,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "work",
-        //         "v_mean_sum": 5.05,
-        //         "a_mean_sum": 4.33,
-        //         "d_mean_sum": 6.12,
-        //         "emotionBasic": "Bored"
-        //       },
-        //       {
-        //         "word": "worthless",
-        //         "v_mean_sum": 1.89,
-        //         "a_mean_sum": 4.45,
-        //         "d_mean_sum": 2.71,
-        //         "emotionBasic": "Sad"
-        //       }
-        //     ],
-        //     "emotions_sum": {
-        //       "Anger": 2,
-        //       "Bored": 12,
-        //       "Excited": 11,
-        //       "Fear": 2,
-        //       "Happy": 4,
-        //       "Sad": 8
-        //     },
-        //     "emotions_percent": {
-        //       "Anger": 0.05128205128205128,
-        //       "Bored": 0.3076923076923077,
-        //       "Excited": 0.28205128205128205,
-        //       "Fear": 0.05128205128205128,
-        //       "Happy": 0.10256410256410256,
-        //       "Sad": 0.20512820512820512
-        //     }
-        //   }
+            // "filtered_lyrics": ['back', 'ball', 'bluejeans', 'boy', 'call', 'chain', 'children', 'do', 'drunk', 'father', 'foot', 'gambler', "gamblin'", 'god', "goin'", 'got', 'have', "he's", 'house', "i'm", "it's", 'know', 'lives', 'man', 'misery', 'mother', 'needs', 'new', 'one', 'organ', 'orleans', 'other', 'platform', 'poor', 'rising', 'ruin', 'satisfied', 'sewed', 'sin', 'solo', 'spend', 'suitcase', 'sun', 'tailor', 'tell', 'thing', 'time', 'train', 'trunk', 'wear'], "vad_lyrics": [{'word': 'back', 'v_mean_sum': 4.76, 'a_mean_sum': 2.59, 'd_mean_sum': 5.22, 'emotionBasic': 'Bored'}, {'word': 'ball', 'v_mean_sum': 6.14, 'a_mean_sum': 3.48, 'd_mean_sum': 5.47, 'emotionBasic': 'Excited'}, {'word': 'boy', 'v_mean_sum': 5.84, 'a_mean_sum': 4.11, 'd_mean_sum': 5.5, 'emotionBasic': 'Bored'}, {'word': 'call', 'v_mean_sum': 6.18, 'a_mean_sum': 3.29, 'd_mean_sum': 5.61, 'emotionBasic': 'Excited'}, {'word': 'chain', 'v_mean_sum': 4.79, 'a_mean_sum': 4.05, 'd_mean_sum': 4.2, 'emotionBasic': 'Sad'}, {'word': 'children', 'v_mean_sum': 6.36, 'a_mean_sum': 5.09, 'd_mean_sum': 5.95, 'emotionBasic': 'Excited'}, {'word': 'do', 'v_mean_sum': 5.41, 'a_mean_sum': 3.67, 'd_mean_sum': 6.35, 'emotionBasic': 'Bored'}, {'word': 'drunk', 'v_mean_sum': 4.06, 'a_mean_sum': 5.05, 'd_mean_sum': 2.94, 'emotionBasic': 'Fear'}, {'word': 'father', 'v_mean_sum': 6.88, 'a_mean_sum': 3.68, 'd_mean_sum': 5.19, 'emotionBasic': 'Excited'}, {'word': 'foot', 'v_mean_sum': 4.68, 'a_mean_sum': 2.77, 'd_mean_sum': 5.97, 'emotionBasic': 'Bored'}, {'word': 'gambler', 'v_mean_sum': 4.15, 'a_mean_sum': 5.8, 'd_mean_sum': 4.44, 'emotionBasic': 'Anger'}, {'word': 'god', 'v_mean_sum': 5.9, 'a_mean_sum': 5.56, 'd_mean_sum': 5.0, 'emotionBasic': 'Excited'}, {'word': 'have', 'v_mean_sum': 5.86, 'a_mean_sum': 3.52, 'd_mean_sum': 5.72, 'emotionBasic': 'Bored'}, {'word': 'house', 'v_mean_sum': 7.19, 'a_mean_sum': 3.95, 'd_mean_sum': 6.41, 'emotionBasic': 'Happy'}, {'word': 'know', 'v_mean_sum': 6.82, 'a_mean_sum': 3.24, 'd_mean_sum': 5.78, 'emotionBasic': 'Excited'}, {'word': 'man', 'v_mean_sum': 5.42, 'a_mean_sum': 4.36, 'd_mean_sum': 5.44, 'emotionBasic': 'Bored'}, {'word': 'misery', 'v_mean_sum': 2.2, 'a_mean_sum': 4.82, 'd_mean_sum': 3.8, 'emotionBasic': 'Sad'}, {'word': 'mother', 'v_mean_sum': 7.53, 'a_mean_sum': 4.73, 'd_mean_sum': 6.11, 'emotionBasic': 'Happy'}, {'word': 'new', 'v_mean_sum': 7.68, 'a_mean_sum': 5.14, 'd_mean_sum': 5.22, 'emotionBasic': 'Happy'}, {'word': 'one', 'v_mean_sum': 6.09, 'a_mean_sum': 2.67, 'd_mean_sum': 5.56, 'emotionBasic': 'Excited'}, {'word': 'organ', 'v_mean_sum': 4.95, 'a_mean_sum': 3.41, 'd_mean_sum': 5.55, 'emotionBasic': 'Bored'}, {'word': 'other', 'v_mean_sum': 5.41, 'a_mean_sum': 3.48, 'd_mean_sum': 6.0, 'emotionBasic': 'Bored'}, {'word': 'platform', 'v_mean_sum': 5.0, 'a_mean_sum': 4.18, 'd_mean_sum': 6.42, 'emotionBasic': 'Bored'}, {'word': 'poor', 'v_mean_sum': 3.67, 'a_mean_sum': 4.67, 'd_mean_sum': 4.0, 'emotionBasic': 'Sad'}, {'word': 'ruin', 'v_mean_sum': 2.32, 'a_mean_sum': 5.4, 'd_mean_sum': 5.16, 'emotionBasic': 'Anger'}, {'word': 'satisfied', 'v_mean_sum': 7.16, 'a_mean_sum': 3.95, 'd_mean_sum': 6.26, 'emotionBasic': 'Happy'}, {'word': 'sin', 'v_mean_sum': 3.08, 'a_mean_sum': 5.82, 'd_mean_sum': 5.74, 'emotionBasic': 'Anger'}, {'word': 'solo', 'v_mean_sum': 5.91, 'a_mean_sum': 4.12, 'd_mean_sum': 6.04, 'emotionBasic': 'Excited'}, {'word': 'spend', 'v_mean_sum': 5.91, 'a_mean_sum': 4.48, 'd_mean_sum': 5.88, 'emotionBasic': 'Excited'}, {'word': 'suitcase', 'v_mean_sum': 5.25, 'a_mean_sum': 3.24, 'd_mean_sum': 5.5, 'emotionBasic': 'Bored'}, {'word': 'sun', 'v_mean_sum': 6.92, 'a_mean_sum': 4.64, 'd_mean_sum': 4.98, 'emotionBasic': 'Excited'}, {'word': 'tailor', 'v_mean_sum': 5.29, 'a_mean_sum': 3.61, 'd_mean_sum': 6.17, 'emotionBasic': 'Bored'}, {'word': 'tell', 'v_mean_sum': 5.27, 'a_mean_sum': 3.86, 'd_mean_sum': 4.94, 'emotionBasic': 'Sad'}, {'word': 'thing', 'v_mean_sum': 5.55, 'a_mean_sum': 3.43, 'd_mean_sum': 5.41, 'emotionBasic': 'Bored'}, {'word': 'time', 'v_mean_sum': 5.6, 'a_mean_sum': 3.41, 'd_mean_sum': 4.36, 'emotionBasic': 'Sad'}, {'word': 'train', 'v_mean_sum': 6.36, 'a_mean_sum': 4.05, 'd_mean_sum': 5.72, 'emotionBasic': 'Excited'}, {'word': 'trunk', 'v_mean_sum': 5.02, 'a_mean_sum': 3.51, 'd_mean_sum': 5.46, 'emotionBasic': 'Bored'}, {'word': 'wear', 'v_mean_sum': 6.36, 'a_mean_sum': 3.33, 'd_mean_sum': 5.72, 'emotionBasic': 'Excited'}], "emotions_sum": {'Anger': 3, 'Bored': 13, 'Excited': 12, 'Fear': 1, 'Happy': 4, 'Sad': 5}, "emotions_percent": {'Anger': 0.07894736842105263, 'Bored': 0.34210526315789475, 'Excited': 0.3157894736842105, 'Fear': 0.02631578947368421, 'Happy': 0.10526315789473684, 'Sad': 0.13157894736842105}
     }
 
     handleSearchClick = (event) => {
@@ -412,8 +62,10 @@ export default class Main extends Component {
                 // TODO: Replace /r/n with return, or . punctuation.
 
                 this.setState({
-                    errorMessage: '',
-                    listOfSongs: response.data.lyrics
+                    songAnalysis: '',   // Removes any previous song analysis (happens if user searches twice).
+                    errorMessage: '',   // Removes any previous error message.
+                    listOfSongs: response.data.lyrics,
+                    selectedSong: ''    // Removes any previous selected song (happens if user searches twice).
                 });
             })
             .catch(error => {
@@ -441,7 +93,30 @@ export default class Main extends Component {
         let query = this.state.listOfSongs[this.state.selectedSong]['lyrics'];
         console.log('query', query)
 
-        axios.get(`/api/song_analyze/?q=${query}`)
+        //Old way that definitely works.
+        // axios.get(`/api/song_analyze/?q=${query}`)
+        // .then(response => {
+        //     console.log('Then statement.')
+        //     console.log(response.data);
+
+        //     this.setState({
+        //         songAnalysis: response.data
+        //     })
+
+        //     // this.setState({
+        //     //     errorMessage: '',
+        //     //     listOfSongs: response.data.songList
+        //     // });
+        // })
+        // .catch(error => {
+        //     console.log('Error', error)
+        // });
+
+
+
+        axios.post(`/api/song_analyze/`, {
+            original_lyrics: this.state.listOfSongs[this.state.selectedSong]['lyrics']
+        })
         .then(response => {
             console.log('Then statement.')
             console.log(response.data);
@@ -458,6 +133,7 @@ export default class Main extends Component {
         .catch(error => {
             console.log('Error', error)
         });
+
         console.log('Well thats over with!')
     }
 
@@ -471,6 +147,7 @@ export default class Main extends Component {
                 {/* <Form noValidate validated={validated}> */}
                 <Form>
                     {/* {% csrf_token %} */}
+                    {/* <CSRFToken /> */}
                     <Form.Group controlId='songInput'>
                         <Form.Label>Enter the name of the song you want to search for:</Form.Label>
                         <Form.Control type='text' name='songInput' placeholder='Song name' required />
@@ -505,10 +182,12 @@ export default class Main extends Component {
                     !this.state.selectedSong
                     ? ''
                     : <>
-                    <h2>These are the original lyrics:</h2>
-                    <p>"{this.state.listOfSongs[this.state.selectedSong]['lyrics']}"</p>
-                    <Button variant="primary" onClick={this.handleAnalyzeClick}>Analyze</Button>
-                        {/* <AnalysisResults  /> */}
+                        <h2>These are the original lyrics:</h2>
+                        <p>"{this.state.listOfSongs[this.state.selectedSong]['lyrics']}"</p>
+                        <form>
+                            <input type="hidden" id="hidden_lyrics" value={this.state.listOfSongs[this.state.selectedSong]['lyrics']} />
+                            <Button variant="primary" onClick={this.handleAnalyzeClick}>Analyze</Button>
+                        </form>
                     </>
                 }
 
