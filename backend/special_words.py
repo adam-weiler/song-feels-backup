@@ -16,19 +16,3 @@ special_words = ['chorus', 'outro', 'refrain', 'verse']
 # bolt
 
 
-# Happy:
-# laugh-beam
-
-# Excited:
-# grin-stars
-
-# Anger:
-# angry
-
-# Fear:
-# 😱
-
-# Bored:
-
-# Sad:
-#sad-tear

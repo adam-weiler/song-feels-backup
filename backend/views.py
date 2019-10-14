@@ -58,11 +58,7 @@ from backend.special_words import special_words  # A list of special words that 
 # file = open(os.path.join(settings.STATIC_URL, 'testFile.csv'))
 
 
-# These work locally:
-file = open('backend/testFile.csv', 'r')  # A smaller version of the VAD database.
-# file = open('backend/libra.csv', 'r')  # A smaller version of the VAD database.
-# file = open('./CSV/libra.csv', 'r')  # The full version of the VAD database.
-librareader = csv.reader(file)  # Saves the CSV file to a variable.
+
 
 
 
@@ -160,6 +156,7 @@ class SongView(View):
 
 class AnalyzeView(View):
 
+    @csrf_exempt
     def __init__(self):
         self.title = ''
         self.unfiltered_lyrics = ''  # The original lyrics from the API.
@@ -171,12 +168,12 @@ class AnalyzeView(View):
         self.emotions__sum = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}  # The total number of times each emotion was experienced.
         self.emotions__percent = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}  # The percent each emotion was experienced.
 
-
+    @csrf_exempt
     def __str__(self):
     #     return f'The {self.title} song.'
         return 'The AnalyzeView object.'
 
-
+    @csrf_exempt
     def getVADaverages(self, vad_lyrics):
         print('\n***AnalyzeView - getVADaverages***')
         # count = 0
@@ -290,7 +287,7 @@ class AnalyzeView(View):
     #     else:
     #         return "Neutral"
 
-
+    @csrf_exempt
     def whichEmotionBasic(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
         # print('\n***AnalyzeView - whichEmotionBasic***')
         if valence >= 5.9:  # A positive emotion.
@@ -331,10 +328,19 @@ class AnalyzeView(View):
             #         print('Bored')
             #         return "Bored"
 
-
+    @csrf_exempt
     def compareToVADfile(self, lyrics):
         print('\n***AnalyzeView - compareToVADfile***')
+
+        # These work locally:
+        # file = open('backend/testFile.csv', 'r')  # A smaller version of the VAD database.
+        file = open('backend/CSV/libra.csv', 'r')  # A smaller version of the VAD database.
+        # file = open('./CSV/libra.csv', 'r')  # The full version of the VAD database.
+        librareader = csv.reader(file)  # Saves the CSV file to a variable.
+
         length = len(lyrics)
+        print(length)
+        print(lyrics)
         vad_lyrics = []
 
         for line in librareader:  # For each line in VAD database CSV file.
@@ -352,7 +358,7 @@ class AnalyzeView(View):
 
         return vad_lyrics
 
-
+    @csrf_exempt
     def removeCommonWords(self, lyrics):  # Removes any lyrics that are common_words.
         print('\n***AnalyzeView - removeCommonWords***')
         for word in common_words:
@@ -372,18 +378,18 @@ class AnalyzeView(View):
 
     #     return lyrics
 
-    
+    @csrf_exempt
     def splitIntoList(self, lyrics):  # Splits into list, adds into set to remove duplicates.
         print('\n***AnalyzeView - splitIntoList***')
         return list(set(lyrics.split()))  #TODO - Option to keep duplicate words. Currently removes duplicates.
         return lyrics.split()
 
-
+    @csrf_exempt
     def removeSpecialCharacters(self, lyrics):  # Removes all special characters and numbers from text.
         print('\n***AnalyzeView - removeSpecialCharacters***')
         return re.sub('[^A-Za-z\']+', ' ', lyrics)
 
-
+    @csrf_exempt
     def analyzeLyrics(self, unfiltered_lyrics):
         print('\n***AnalyzeView - analyzeLyrics***')
 
@@ -430,6 +436,7 @@ class AnalyzeView(View):
 
         # return ""
 
+    @csrf_exempt
     def post(self, request): # Trying this for a second.
     # def get(self, request): # Switch back to this
     # def get(self):  # For testing only.

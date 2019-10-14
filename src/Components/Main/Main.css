@@ -5,8 +5,9 @@
 
 .jumbotron {
     margin: 0 auto;
-    background-color: beige;
+    /* background-color: beige; */
     max-width: 800px;
+    padding: 0px !important;
 }
 
 .form-group {
@@ -18,4 +19,30 @@
 input {
     margin: 0 auto;
     width: 224px;
+}
+
+hr {
+    padding: 0px !important;
+    margin: 0px !important;    
+}
+
+ul {
+    margin: 0px !important;
+}
+
+.section1 {
+    background-color: #A6E7FF !important;
+    padding: 20px 20px 0 20px !important;
+}
+
+.section2 {
+    margin: 0;
+    background-color: rgb(255, 166, 166) !important;
+    padding: 20px 20px 0 20px !important;
+}
+
+.section3 {
+    margin: 0;
+    background-color: rgb(166, 255, 193) !important;
+    padding: 20px 20px 0 20px !important;
 }

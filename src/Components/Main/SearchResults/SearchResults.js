@@ -26,7 +26,6 @@ export default class SearchResults extends Component {
 
         return (
             <>
-                <br/>
                 <h2>We found {this.props.listOfSongs.length} results:</h2>
 
                 {
