@@ -1,64 +1,33 @@
-# For graphing
-# import matplotlib.pyplot as plt
-# plt.plot([1, 2, 3, 4])
-# plt.ylabel('some numbers')
-# plt.show()
-
-
 # Python imports:
-# from collections import OrderedDict 
-import csv  # Needed to open .CSV files.
-import dotenv
-import json
-import logging
-import os
-import re  # Needed to strip punctuation from unfiltered_lyrics.
-import requests  # Needed to make API calls.
-# import string  # Needed to strip punctuation from unfiltered_lyrics.
+import csv  # Used to open .CSV files.
+import dotenv  # Used to load APIkey from .env file.
+import json  # Used to work with JSON files.
+import logging  # Not used in production.
+import os  # Used to load APIkey from .env file.
+import re  # Used to strip punctuation from unfiltered_lyrics.
+import requests  # Used to make API calls.
 
 dotenv.load_dotenv()
 audd_key = os.environ.get('AUDD_API_KEY')
 
 
-# Where am I?
-# cwd = os.getcwd()
-# files = os.listdir(cwd)
-# print(cwd)
-# print(files)
-
-
 # Django imports:
-    # from django.views.decorators.cache import never_cache  # This adds headers to a response so that it will never be cached.
-from django.conf import settings  #Disabled for AREPL
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
-    # from django.views.generic import TemplateView
-
-    # Serve Single Page Application
-    # index = never_cache(TemplateView.as_view(template_name='index.html'))
+from django.conf import settings  # Not used in production.
+from django.http import HttpResponse, JsonResponse  # Used to send a response back to user.
+from django.views.decorators.csrf import csrf_exempt  # Remove this later to restrict CSRF access.
+from django.views.generic import View  # Used for Django's Views.
 
 
-# These are for Django REST framework - Authentication.
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+# These are for Django REST framework - Authentication:
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-
 # SongFeels imports
 from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 from backend.special_words import special_words  # A list of special words that can be safely ignored since they are not actually part of the lyrics.
-# from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
-
-
-# file = open(os.path.join(settings.STATICFILES_DIRS, './CSV/testFile.csv'), 'r')  # A smaller version of the VAD database.
-
-# file = open(os.path.join(settings.STATIC_URL, 'testFile.csv'))
-
-
-
 
 
 
@@ -84,38 +53,27 @@ class FrontendAppView(View):
             )
 
 
-# class ApiView(View):
-
-#     def get(self, request):
-#         return JsonResponse({
-#             "def get": "This is a get request."
-#         })
-
-#     @csrf_exempt
-#     def post(self, request):
-#         return JsonResponse({
-#             "def post": "This is a post request."
-#         })
-
-
 class SongView(View):
 
     # These are for Django REST framework - Authentication.
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @csrf_exempt
     def __init__(self):
         self.body = ''
 
-    def get(self, request): # Switch back to this
+    @csrf_exempt
+    def __str__(self):
+        return 'The SongView object.'
 
+    def get(self, request):  # User has submit song request, which will be sent to API.
+    # Switch back to this
     # def get(self):  # For testing only.
         print('\n***SongView - get***')
-        print(request)
         query = request.GET.urlencode()
-        # print(query)
 
-        print(f'https://api.audd.io/findLyrics/?{query}')
+        # print(f'https://api.audd.io/findLyrics/?{query}')
 
         try:
             data = {
@@ -123,93 +81,50 @@ class SongView(View):
             }
             response = requests.post(f'https://api.audd.io/findLyrics/?{query}', data=data)
             self.body = json.loads(response.content)
-            # print(self.body)
-            print (self.body['result'])
-            # print (self.body['result'][0])
-            # print (self.body['result'][0]['lyrics'])
-            print('Success!')
+            # print (self.body['result'])
+            print('Request to Audd has succeeded.')
             return JsonResponse({
                 'lyrics': self.body['result']
             })
         except:
-            print('Failure!')
+            print('Request to Audd has failed.')
             return JsonResponse({
                 'error': response.status_code,
                 'message': 'Something went wrong!'
         })
-
-        # new_song.title = query
-        # print(new_song)
-        # new_song.analyzeLyrics()
-
-        # print(self.body)
-
-        # return JsonResponse({
-        #     'songList': self.body['result']
-        # })
-
-
-    
-
-
 
 
 class AnalyzeView(View):
 
     @csrf_exempt
     def __init__(self):
-        self.title = ''
         self.unfiltered_lyrics = ''  # The original lyrics from the API.
         self.filtered_lyrics = []  # The data-cleaned lyrics for the song.
         self.vad_lyrics = []  # Only the lyrics that appeared in the VAD database.
+        self.vad__average = {'valence':0, 'arousal':0, 'dominance':0, 'emotion': 'Neutral'}  # Average of VAD stats for song.
+        self.emotions__sum_percent = {'Anger':[0,0], 'Bored':[0,0], 'Excited':[0,0], 'Fear':[0,0], 'Happy':[0,0], 'Sad':[0,0]}  # The total number of times each emotion was experienced, and the overall percent each emotion was experienced.
 
-        self.vad__average = {'valence':0, 'arousal':0, 'dominance':0, 'emotion': 'Neutral'}
-
-        self.emotions__sum = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}  # The total number of times each emotion was experienced.
-        self.emotions__percent = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}  # The percent each emotion was experienced.
 
     @csrf_exempt
     def __str__(self):
-    #     return f'The {self.title} song.'
         return 'The AnalyzeView object.'
 
     @csrf_exempt
     def getVADaverages(self, vad_lyrics):
         print('\n***AnalyzeView - getVADaverages***')
-        # count = 0
         word_count = len(vad_lyrics)
-        # v_mean_sum__average = 0
-        # a_mean_sum__average = 0
-        # d_mean_sum__average = 0
         v_mean_sum__sum = 0
         a_mean_sum__sum = 0
         d_mean_sum__sum = 0
-        # vad__total = 0
-
-        # self.emotions__sum = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}
-        # self.emotions__percent = {'Anger':0, 'Bored':0, 'Excited':0, 'Fear':0, 'Happy':0, 'Sad':0}
-        # emotions__total = 0 ## This is same as word_count.
-        
-        
 
         for word in self.vad_lyrics:  # For each lyric that has been found in the VAD database.
-            # count = count + 1
-            # print(word['v_mean_sum'])
-            v_mean_sum__sum += word['v_mean_sum']  # Used for average; keeps positive and negative signs.
+            v_mean_sum__sum += word['v_mean_sum']  # Used for average.
             a_mean_sum__sum += word['a_mean_sum']
             d_mean_sum__sum += word['d_mean_sum']
 
-            self.emotions__sum[word['emotionBasic']] += 1
+            self.emotions__sum_percent[word['emotionBasic']][0] += 1
 
-            # v_mean_sum__sum += abs(word['v_mean_sum'])  # Used for total; ignores negative signs.
-            # a_mean_sum__sum += abs(word['a_mean_sum'])
-            # d_mean_sum__sum += abs(word['d_mean_sum'])
-
-
-            # vad__total += abs(v_mean_sum__sum) + abs(a_mean_sum__sum) + abs(d_mean_sum__sum)  # Total valence, arousal, and dominance.  Ignores negative sign.
-
-        print ('v_mean_sum__sum', v_mean_sum__sum)
-        print ('word count', word_count)
+        # print ('v_mean_sum__sum', v_mean_sum__sum)
         
         v_mean_sum__average = v_mean_sum__sum / word_count  # average = Total values / words in lyrics.
         a_mean_sum__average = a_mean_sum__sum / word_count
@@ -220,24 +135,20 @@ class AnalyzeView(View):
 
         # vad__total += v_mean_sum__sum + a_mean_sum__sum + d_mean_sum__sum  # Grand total.
 
-        # emotions__total += sum(self.emotions__sum.values())
-        anger__average = self.emotions__sum['Anger'] / word_count
-        bored__average = self.emotions__sum['Bored'] / word_count
-        excited__average = self.emotions__sum['Excited'] / word_count
-        fear__average = self.emotions__sum['Fear'] / word_count
-        happy__average = self.emotions__sum['Happy'] / word_count
-        sad__average = self.emotions__sum['Sad'] / word_count
-        self.emotions__percent = {'Anger':anger__average, 'Bored':bored__average, 'Excited':excited__average, 'Fear':fear__average, 'Happy':happy__average, 'Sad':sad__average}
+        self.emotions__sum_percent['Anger'][1] = self.emotions__sum_percent['Anger'][0] / word_count
+        self.emotions__sum_percent['Bored'][1] = self.emotions__sum_percent['Bored'][0] / word_count
+        self.emotions__sum_percent['Excited'][1] = self.emotions__sum_percent['Excited'][0] / word_count
+        self.emotions__sum_percent['Fear'][1] = self.emotions__sum_percent['Fear'][0] / word_count
+        self.emotions__sum_percent['Happy'][1] = self.emotions__sum_percent['Happy'][0] / word_count
+        self.emotions__sum_percent['Sad'][1] = self.emotions__sum_percent['Sad'][0] / word_count
 
-
-        print (f'{word_count} words')
-        print('Averages:')
+        # print (f'{word_count} words')
+        # print('Averages:')
         # print(v_mean_sum__average)
         # print(a_mean_sum__average)
         # print(d_mean_sum__average)
                     # print(self.whichEmotionBasic(v_mean_sum__average, a_mean_sum__average, d_mean_sum__average))
-        print(self.vad__average)
-        print()
+        # print(self.vad__average)
 
         # print('Totals:')
         # print(v_mean_sum__sum)
@@ -245,17 +156,10 @@ class AnalyzeView(View):
         # print(d_mean_sum__sum)
         # print(vad__total)
 
-        print('Emotions Sums and Total:')
-        print(self.emotions__sum)
-        # print(emotions__total)
-        print(self.emotions__percent)
+        # print('Emotions Sums and Total:')
+        # print(self.emotions__sum_percent)
         
         # print(self.vad_lyrics)
-
-
-        # return 42
-
-
         
 
     # def whichEmotionSpecific(self, valence, arousal, dominance):  # Tries to assign an emotion based on Valence, Arousal, and Dominance values.
@@ -292,62 +196,44 @@ class AnalyzeView(View):
         # print('\n***AnalyzeView - whichEmotionBasic***')
         if valence >= 5.9:  # A positive emotion.
             if valence >= 7:
-                print('Happy')
+                # print('Happy')
                 return "Happy"  # Joy
             else:
-                print('Excited')
+                # print('Excited')
                 return "Excited"  # Surprise
         else:  # A negative emotion.
             if arousal >= 5:  # A high-energy emotion.
                 if dominance >= 4.21:
-                    print('Anger')
+                    # print('Anger')
                     return "Anger"
                 else:
-                    print('Fear')
+                    # print('Fear')
                     return "Fear"
             else:  # A low-energy emotion.
                 if dominance >= 5.18:
-                    print('Bored')  # Disgust
+                    # print('Bored')  # Disgust
                     return "Bored"
                 else:
-                    print('Sad')
+                    # print('Sad')
                     return "Sad"
 
-            # if dominance <= 5:  # A powerless emotion
-            #     if arousal >= 7.1:
-            #         print('Fear')
-            #         return "Fear"
-            #     else:
-            #         print('Sad')
-            #         return "Sad"
-            # else:
-            #     if arousal >= 7.7:
-            #         print('Anger')
-            #         return "Anger"
-            #     else:
-            #         print('Bored')
-            #         return "Bored"
 
     @csrf_exempt
     def compareToVADfile(self, lyrics):
         print('\n***AnalyzeView - compareToVADfile***')
 
-        # These work locally:
         # file = open('backend/testFile.csv', 'r')  # A smaller version of the VAD database.
-        file = open('backend/CSV/libra.csv', 'r')  # A smaller version of the VAD database.
-        # file = open('./CSV/libra.csv', 'r')  # The full version of the VAD database.
+        file = open('backend/CSV/libra.csv', 'r')  # The full version of the VAD database.
         librareader = csv.reader(file)  # Saves the CSV file to a variable.
 
         length = len(lyrics)
-        print(length)
-        print(lyrics)
         vad_lyrics = []
 
         for line in librareader:  # For each line in VAD database CSV file.
             word = line[1]  # Takes word from B column of CSV.
 
             if word in lyrics:  # If current word of CSV matches a word in the lyrics.
-                print(f'Matching word found: {word}')
+                # print(f'Matching word found: {word}')
                 v_mean_sum = float(line[2])  # Valence Mean sum.
                 a_mean_sum = float(line[5])  # Arousal Mean sum.
                 d_mean_sum = float(line[8])  # Dominance Mean sum
@@ -393,113 +279,67 @@ class AnalyzeView(View):
     def analyzeLyrics(self, unfiltered_lyrics):
         print('\n***AnalyzeView - analyzeLyrics***')
 
-
         # Several steps must be taken to prepare the lyrics before comparing to VAD database:
-        # Remove special characters and punctuation.
-        # Convert to lowercase.
-        # Split words into a list.
-        # Add into a set to remove any duplicates.
-        # Sort words alphabetically.
-        # Removes any common or short words that can be safely ignored since they are not in the database.
-        # This reduces 'The Rising Sun Blues' lyrics from 190 to 76.
-
+        #1 Convert to lowercase.
+        #2 Remove special characters and punctuation.  
+        #3 Split words into a list and add into a set to remove any duplicates.
+        #4 Sort words alphabetically.
+        #5 Removes any common or short words that can be safely ignored since they are not in the database.
+        # This reduces 'The Rising Sun Blues' lyrics from 190 words to 50.
 
         self.filtered_lyrics = unfiltered_lyrics.lower()  # Converts to lowercase.
-        print(f'a {self.filtered_lyrics}\n')
+        # print(f'#1 Lower-case: {self.filtered_lyrics}\n')
 
         self.filtered_lyrics = self.removeSpecialCharacters(self.filtered_lyrics)  # Removes special characters.
-        print(f'b {self.filtered_lyrics}\n')
+        # print(f'#2 Remove special characters: {self.filtered_lyrics}\n')
         
         self.filtered_lyrics = self.splitIntoList(self.filtered_lyrics)  # Splits each word into an array item.
-        print(f'c {self.filtered_lyrics}\n')
+        # print(f'#3 Split into list: {self.filtered_lyrics}\n')
 
         # filtered_lyrics = self.removeSpecialWords(filtered_lyrics)  # Removes special words. ie: [Chorus]  #TODO
-        # print(f'd {filtered_lyrics}\n')
+        # print(f'#x Remove special words: {filtered_lyrics}\n')
         
         self.filtered_lyrics.sort()  # Sorts list alphabetically.
-        print(f'e {self.filtered_lyrics}\n')
+        # print(f'#4 Sort list alphabetically. {self.filtered_lyrics}\n')
 
         self.filtered_lyrics = self.removeCommonWords(self.filtered_lyrics)  # Removes common words.
-        print(f'f {self.filtered_lyrics}\n')
+        # print(f'#5 Remove common words: {self.filtered_lyrics}\n')
 
         # Searches the VAD database for the filtered_lyrics.
         # This will assign numerical value to each word found.
         # 'The Rising Sun Blues' lyrics have 53 hits.
         self.vad_lyrics = self.compareToVADfile(self.filtered_lyrics)
 
-
         # print(self.vad_lyrics) word, v_mean_sum, a_mean_sum, d_mean_sum, emotionBasic
-
         self.vad_averages = self.getVADaverages(self.vad_lyrics)  
 
 
-
-        # return ""
-
     @csrf_exempt
-    def post(self, request): # Trying this for a second.
-    # def get(self, request): # Switch back to this
-    # def get(self):  # For testing only.
+    def post(self, request):  # User has clicked Analyze button.
         print('\n***AnalyzeView - get***')
-        # print(request)
-        # print(request.body)
-        # print(json.loads(request.body.decode('utf-8')))
-
-        post_data = json.loads(request.body.decode('utf-8'))
         
-        self.unfiltered_lyrics = post_data['original_lyrics']
-        print(self.unfiltered_lyrics)
-
-            # post_data = request.session.get('post_data')
-            # print('Post_data', post_data)
-
-            # print('/n/n')
+        post_data = json.loads(request.body.decode('utf-8'))  # Original lyrics from hidden field.
+        self.unfiltered_lyrics = post_data['original_lyrics']  # Stores original lyrics.
+        # print(self.unfiltered_lyrics)
             
-
-            # query = request.GET.urlencode()
-            # print(query)
-            # query = int(query, 2)
-            # query = 0
-            # print(query)
-            # # query = 4
-            
-            # print(type(query))
-            # print(query)
-
-            # These all work:
-            # print(new_song_search)
-            # print()
-            # print(new_song_search.body)
-            # print()
-            # print(new_song_search.body['result'])
-            # print()
-            # print(new_song_search.body['result'][query])
-            # print()
-            # print(new_song_search.body['result'][query]['lyrics'])
-
-            # self.analyzeLyrics(new_song_search.body['result'][query]['lyrics'])  # I need this!
-
-
         self.analyzeLyrics(self.unfiltered_lyrics)
 
         print('\n\n***AnalyzeView - get (again)***')
         print('\nFiltered_lyrics:', len(self.filtered_lyrics), self.filtered_lyrics)
         print('\nLyrics found in VAD database:', len(self.vad_lyrics), self.vad_lyrics)
         # print('\nAverage of all VAD scores:', self.vad__average) #TODO This doesn't work unless words repeat?
-        print('\nEmotions sum:', self.emotions__sum)
-        print('\nEmotions percent:', self.emotions__percent)
-
-
-        print()
+        print('\nEmotions sum & percent:', self.emotions__sum_percent)
+        
         return JsonResponse({
             'filtered_lyrics': self.filtered_lyrics,
             'vad_lyrics': self.vad_lyrics,
-            'emotions_sum': self.emotions__sum,
-            'emotions_percent': self.emotions__percent
+            'emotions_sum_percent': self.emotions__sum_percent
         })
     
 new_song_search = SongView() 
 new_analysis = AnalyzeView()
+
+
 
 
 ##These are for testing only.
@@ -516,23 +356,14 @@ new_analysis = AnalyzeView()
                                 # Get VAD average for lyrics.	***AnalyzeView - getVADaverages***
 
 
+# For graphing
+# import matplotlib.pyplot as plt
+# plt.plot([1, 2, 3, 4])
+# plt.ylabel('some numbers')
+# plt.show()
 
-
-
-
-
-
-# new_song = AnalyzeView()
-# new_song.analyzeLyrics()
-
-# print(new_song.title)
-# print()
-# print(new_song.unfiltered_lyrics.count(' '))
-# print(new_song.unfiltered_lyrics)
-# print()
-# print(len(new_song.filtered_lyrics))
-# print(new_song.filtered_lyrics)
-# print()
-# print(len(new_song.vad_lyrics))
-# print(new_song.vad_lyrics)
-
+# Find location of directory.
+# cwd = os.getcwd()
+# files = os.listdir(cwd)
+# print(cwd)
+# print(files)

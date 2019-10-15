@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 // Call stylesheet last:
 import './SearchForm.css';
 
-export default function SearchForm(props) {
+const SearchForm = (props) => {
     return (
         <Form>
             {/* {% csrf_token %} */}
@@ -37,5 +37,7 @@ export default function SearchForm(props) {
                 Search
             </Button>
         </Form>
-    )
+    );
 }
+
+export default SearchForm;

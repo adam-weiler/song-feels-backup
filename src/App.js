@@ -1,6 +1,5 @@
 // Vanilla React:
-import React, { Component } from 'react';
-// import logo from './logo.svg';
+import React from 'react';
 
 // Smaller components:
 import Footer from './Components/Footer/Footer.js';
@@ -9,7 +8,7 @@ import Main from './Components/Main/Main.js';
 // Call stylesheet last:
 import './App.css';
 
-function App() {
+const App = () => {
     return (
         <div className="App">
             <header>
