@@ -1,3 +1,14 @@
+.search-results {
+    margin: 15px;
+    display: grid;
+    grid-template-columns: 65% 35%;
+}
+
+.btn-lyrics {
+    margin: 0 5px !important;
+    /* padding: 50px !important; */
+}
+
 .original-lyrics {
     white-space: pre-line;
 }

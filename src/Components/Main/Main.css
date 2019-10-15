@@ -51,3 +51,15 @@ ul {
 .section1, .section2, .section3 {
     padding-bottom: 20px !important;
 }
+
+.rightText {
+    text-align: right;
+}
+
+.leftText {
+    text-align: left;
+}
+
+.info-box {
+    cursor: help;
+}

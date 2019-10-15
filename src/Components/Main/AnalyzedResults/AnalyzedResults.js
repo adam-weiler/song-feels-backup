@@ -33,15 +33,15 @@ const AnalyzedResults = (props) => {
         //This represents emotionName, emotionSum, and emotionPercent.
         
         emotionsSumPercentElements = emotionsSumPercentEntries.map(  // Map over the newly created emotions_percent array.  This is displayed as 6 EmojiCards.
-            (elem, id) => <EmojiCard emotionImage={emotionsImages[id]} emotionName={elem[0]} emotionSum={elem[1][0]} emotionPercent={parseFloat(elem[1][1] * 100).toFixed(2)+"%"} />
+            (elem, id) => <EmojiCard key={emotionsImages[id]} emotionImage={emotionsImages[id]} emotionName={elem[0]} emotionSum={elem[1][0]} emotionPercent={parseFloat(elem[1][1] * 100).toFixed(2)+"%"} />
         );
 
         filteredLyricsElements = props.songAnalysis.filtered_lyrics.map(  // Map over all filtered lyrics. This is displayed in a paragraph.
-            (elem, id) => <>{elem}, </>
+            (elem, id) => <span key={elem}>{elem}, </span>
         );
 
         vadLyricsElements = props.songAnalysis.vad_lyrics.map(  // Map over all lyrics found in the VAD database. This is displayed as a table.
-            (elem, id) => <tr>
+            (elem, id) => <tr key={elem.word}>
                 <td>{id + 1}</td>
                 <td>{elem.word}</td>
                 <td>{elem.v_mean_sum}</td>
@@ -89,9 +89,15 @@ const AnalyzedResults = (props) => {
                             <tr>
                                 <th>#</th>
                                 <th>Word:</th>
-                                <th>Valence:</th>
-                                <th>Arousal:</th>
-                                <th>Dominance</th>
+                                <th>
+                                    <span className='info-box' title="Valence is how negative or positive the word is viewed.">Valence:</span>
+                                </th>
+                                <th>
+                                    <span className='info-box' title="Arousal is how boring or exciting the word is viewed.">Arousal:</span>
+                                </th>
+                                <th>
+                                    <span className='info-box' title="Dominance is how powerless or in control the word feels.">Dominance:</span>
+                                </th>
                                 <th>Emotion:</th>
                             </tr>
                         </thead>
