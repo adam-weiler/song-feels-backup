@@ -63,3 +63,23 @@ ul {
 .info-box {
     cursor: help;
 }
+
+
+.btn-info {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    font-family: arial, sans-serif;
+    color: #17a2b8 !important;
+    cursor: pointer;
+    border-color: transparent !important;
+}
+
+.btn-info:focus {
+    box-shadow: none !important;
+}
+
+.btn-info:hover {
+    color: #138496 !important;
+    text-decoration: underline !important;
+}

@@ -3,7 +3,6 @@ import React from 'react';
 
 // Bootstrap-React components:
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 // Call stylesheet last:
 import './SearchResults.css';
@@ -18,24 +17,15 @@ const SearchResults = (props) => {
                     "{elem.title}" by <em>{elem.artist}</em>&nbsp;
                 </div>
                 <div className='leftText'>                   
-                    <button id={id} className="btn btn-secondary btn-lyrics" type="button" onClick={props.handlePreviewClick}>Lyrics</button>
+                    {/* <button id={id} className="btn btn-secondary btn-lyrics" type="button" onClick={props.handlePreviewClick}>Lyrics</button> */}
                     
+                    <Button className='btn-lyrics' variant="secondary" onClick={props.handleShow('Lyrics', props.listOfSongs[id])}>Lyrics</Button>
+
                     <Button className='btn-analyze' variant="primary" onClick={props.handleAnalyzeClick(id)}>Analyze</Button>
+                    {/* <Form.Check type="checkbox" label="Ignore Repeated Words" /> */}
+
+                    {/* <button className="btn btn-secondary btn-lyrics" type="button" onClick={props.handleShow('Lyrics', props.listOfSongs[id])}>Lyrics</button> */}
                 </div>
-                {/* This only appears when user clicks Tell me More. */}
-                {/* <Modal size="lg" show={props.showModal} onHide={props.handleClose} aria-labelledby="SongFeels explanation">
-                    <Modal.Header closeButton>
-                        <Modal.Title>Explanation:</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p></p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={props.handleClose}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal> */}
             </div>
         );
     }
@@ -45,14 +35,14 @@ const SearchResults = (props) => {
             <h2>We found {props.listOfSongs.length} results:</h2>
 
             {
-                props.listOfSongs.length < 1
+                props.listOfSongs.length < 1  // If there are no songs, display nothing.
                 ? <h3>Please try again!</h3>
-                : <div>
+                : <div>  {/* Else display search results, Lyrics buttons, and Analyze buttons. */}
                         {songElements}
                 </div>
             }
 
-            {
+            {/* {
                 !props.selectedSong
                 ? ''
                 : <>
@@ -61,11 +51,10 @@ const SearchResults = (props) => {
                     <p className='original-lyrics'>{props.listOfSongs[props.selectedSong]['lyrics']}</p>
                     <form>
                         <input type="hidden" id="hidden_lyrics" value={props.listOfSongs[props.selectedSong]['lyrics']} />
-                        {/* <Form.Check type="checkbox" label="Ignore Repeated Words" /> */}
                         <Button variant="primary" onClick={props.handleAnalyzeClick(props.selectedSong)}>Analyze</Button>
                     </form>
                 </>
-            }
+            } */}
         </section>
     );
 }

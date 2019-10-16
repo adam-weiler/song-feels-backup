@@ -7,12 +7,12 @@ import axios from 'axios';
 
 // Smaller components:
 import AnalyzedResults from './AnalyzedResults/AnalyzedResults.js';
+import ModalPopup from './ModalPopup/ModalPopup.js';
 import SearchForm from './SearchForm/SearchForm.js';
 import SearchResults from './SearchResults/SearchResults.js';
 
 // Bootstrap-React components:
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 
 // Call stylesheet last:
 import './Main.css';
@@ -30,17 +30,21 @@ export default class Main extends Component {
         songAnalysis: ''
     }
 
-    handleShow = (event) => {
+    handleShow = (modalTitle, modalBody) => (event) => {
         event.preventDefault();
 
         this.setState({
             showModal: true,
+            modalTitle: modalTitle,
+            modalBody: modalBody
         });
     }
 
     handleClose = () => {
         this.setState({
-            showModal: false
+            showModal: false,
+            modalTitle: '',
+            modalBody: ''
         });
     }
 
@@ -81,15 +85,18 @@ export default class Main extends Component {
         }
     }
 
-    handlePreviewClick = (event) => {
-        event.preventDefault();
-        // console.log('User clicked preview a song:', event.target.id);
-        // console.log('Song data:', this.state.listOfSongs[event.target.id]);
+    // handlePreviewClick = (event) => {
+    //     event.preventDefault();
+    //     console.log('User clicked preview a song:', event.target.id);
+    //     console.log('Song data:', this.state.listOfSongs[event.target.id]);
 
-        this.setState({
-            selectedSong: event.target.id
-        });
-    }
+    //             // this.setState({
+    //             //     selectedSong: event.target.id
+    //             // });
+
+    //     this.handleShow('lyrics')
+    //     console.log('yes')
+    // }
 
     handleAnalyzeClick = (selectedSong) => event => {
         event.preventDefault();
@@ -115,35 +122,21 @@ export default class Main extends Component {
     }
 
     render() {
+
+
         return (
             <main className='jumbotron jumbotron-fluid'>
+                {/* This only appears when user clicks Tell me More, or Lyrics. */}
+                <ModalPopup showModal={this.state.showModal} handleClose={this.handleClose} modalTitle={this.state.modalTitle} modalBody={this.state.modalBody} />
                 <section className='section1'>
                     <h4>
-                        <strong>SongFeels</strong> will analyze the lyrics of a song and determine which emotions the words are conveying. <a href='#' onClick={this.handleShow}>Tell me More</a>
+                        <strong>SongFeels</strong> will analyze the lyrics of a song and determine which emotions the words are conveying. 
+                        {/* <a href='#' onClick={this.handleShow('Explanation', '')}>Tell me More</a> */}
+                        {/* <Button variant="info" onClick={this.handleShow('Explanation', '')}>Tell me More</Button> */}
+                        <button type="button" className="btn-info" onClick={this.handleShow('Explanation', '')}>Tell me More</button>                        
                     </h4>
 
-                    {/* This only appears when user clicks Tell me More. */}
-                    <Modal size="lg" show={this.state.showModal} onHide={this.handleClose} aria-labelledby="SongFeels explanation">
-                        <Modal.Header closeButton>
-                            <Modal.Title>Explanation:</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <p><em>SongFeels</em> uses the <a href='https://audd.io/' target='_blank' rel="noopener noreferrer" >AudD Music Recognition API</a> to search for the user's song and lyrics.</p>
-                            <p>Before touching the database, the lyrics are cleaned by removing symbols, numbers, common words, and duplicate words. This reduces most word counts significantly.</p>
-                            <p>The cleaned lyrics are compared to the <a href='http://crr.ugent.be/archives/1003' target='_blank' rel="noopener noreferrer" >Warringer and Kuperman database</a> of 13,915 English words. Any lyrics that are found in the database are stored with their Valence, Arousal, Dominance score which is between 0 (low) and 10 (high).</p>
-                            <ul>
-                                <li>Valence is how negative or positive the word is viewed.</li>
-                                <li>Arousal is how boring or exciting the word is viewed.</li>
-                                <li>Dominance is how powerless or in control the word feels.</li>
-                            </ul>
-                            <p>Each of the lyrics that was found in the database is run through my algorithm, which looks at the 3 VAD scores and assigns a basic emotion to the word; Anger, Bored, Excited, Fear, Happy, or Sad.</p>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={this.handleClose}>
-                                Close
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
+                    {/* This only appears if there is an error with the Song name inputbox. */}
                     <SearchForm errorMessage={this.state.errorMessage} handleSearchClick={this.handleSearchClick} />
                 </section>
 
