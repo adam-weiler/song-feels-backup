@@ -154,7 +154,7 @@ CSRF_COOKIE_NAME = "csrftoken"
 # CSRF_COOKIE_NAME = "XSRF-TOKEN"
 
 
-from corsheaders.defaults import default_headers
+# from corsheaders.defaults import default_headers
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFTOKEN',
