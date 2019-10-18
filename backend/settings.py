@@ -156,9 +156,9 @@ CSRF_COOKIE_NAME = "csrftoken"
 
 # from corsheaders.defaults import default_headers
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'X-CSRFTOKEN',
-]
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'X-CSRFTOKEN',
+# ]
 
 
 MIDDLEWARE_CLASSES = { 'django.middleware.csrf.CsrfViewMiddleware' }
