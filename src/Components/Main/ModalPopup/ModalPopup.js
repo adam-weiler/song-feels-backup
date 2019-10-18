@@ -19,7 +19,7 @@ const ModalPopup = (props) => {
                     !props.modalBody
                     ? <>
                     <p><em>SongFeels</em> uses the <a href='https://audd.io/' target='_blank' rel="noopener noreferrer" >AudD Music Recognition API</a> to search for the user's song and lyrics.</p>
-                    <p>Before touching the database, the lyrics are cleaned by removing symbols, numbers, common words, and duplicate words. This reduces most word counts significantly.</p>
+                    <p>Before touching the database, the lyrics are cleaned by removing symbols, numbers, common words, and duplicate words. This typically reduces the word count significantly.</p>
                     <p>The cleaned lyrics are compared to the <a href='http://crr.ugent.be/archives/1003' target='_blank' rel="noopener noreferrer" >Warringer and Kuperman database</a> of 13,915 English words. Any lyrics that are found in the database are stored with their Valence, Arousal, Dominance score which is between 0 (low) and 10 (high).</p>
                     <ul>
                         <li>Valence is how negative or positive the word is viewed.</li>

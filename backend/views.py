@@ -15,7 +15,14 @@ audd_key = os.environ.get('AUDD_API_KEY')
 from django.conf import settings  # Not used in production.
 from django.http import HttpResponse, JsonResponse  # Used to send a response back to user.
 from django.views.decorators.csrf import csrf_exempt  # Remove this later to restrict CSRF access.
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View  # Used for Django's Views.
+
+
+# from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 
 # These are for Django REST framework - Authentication:
@@ -59,19 +66,23 @@ class SongView(View):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @csrf_exempt
+    # @requires_csrf_token
     def __init__(self):
         self.body = ''
 
-    @csrf_exempt
+    # @requires_csrf_token
     def __str__(self):
         return 'The SongView object.'
 
+    # @requires_csrf_token
+    # @csrf_protect
+    @method_decorator(csrf_protect)
     def get(self, request):  # User has submit song request, which will be sent to API.
     # Switch back to this
     # def get(self):  # For testing only.
         print('\n***SongView - get***')
         query = request.GET.urlencode()
+        print(request)
 
         # print(f'https://api.audd.io/findLyrics/?{query}')
 

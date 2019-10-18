@@ -6,6 +6,8 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import CSRFToken from '../csrftoken.js'
+
 // Call stylesheet last:
 import './SearchForm.css';
 
@@ -18,8 +20,9 @@ const SearchForm = (props) => {
             <Form.Group controlId='songInput'>
                 <Form.Label>Enter the name of the song you want to search for:</Form.Label>
                 <Form.Control type='text' name='songInput' placeholder='Song name' required />
+                <CSRFToken/>
                 <Form.Control.Feedback type="invalid">
-                    Please provide a valid city.
+                    Please provide a valid song title.
                 </Form.Control.Feedback>
             </Form.Group>
 
