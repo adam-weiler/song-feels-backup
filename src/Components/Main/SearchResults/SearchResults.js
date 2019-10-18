@@ -16,15 +16,11 @@ const SearchResults = (props) => {
                 <div className='rightText'>
                     "{elem.title}" by <em>{elem.artist}</em>&nbsp;
                 </div>
-                <div className='leftText'>                   
-                    {/* <button id={id} className="btn btn-secondary btn-lyrics" type="button" onClick={props.handlePreviewClick}>Lyrics</button> */}
-                    
+                <div className='leftText'>                                     
                     <Button className='btn-lyrics' variant="secondary" onClick={props.handleShow('Lyrics', props.listOfSongs[id])}>Lyrics</Button>
 
                     <Button className='btn-analyze' variant="primary" onClick={props.handleAnalyzeClick(id)}>Analyze</Button>
                     {/* <Form.Check type="checkbox" label="Ignore Repeated Words" /> */}
-
-                    {/* <button className="btn btn-secondary btn-lyrics" type="button" onClick={props.handleShow('Lyrics', props.listOfSongs[id])}>Lyrics</button> */}
                 </div>
             </div>
         );
@@ -41,20 +37,6 @@ const SearchResults = (props) => {
                         {songElements}
                 </div>
             }
-
-            {/* {
-                !props.selectedSong
-                ? ''
-                : <>
-                    <hr/>
-                    <h2>"{props.listOfSongs[props.selectedSong]['title']}" by <em>{props.listOfSongs[props.selectedSong]['artist']}</em>:</h2>
-                    <p className='original-lyrics'>{props.listOfSongs[props.selectedSong]['lyrics']}</p>
-                    <form>
-                        <input type="hidden" id="hidden_lyrics" value={props.listOfSongs[props.selectedSong]['lyrics']} />
-                        <Button variant="primary" onClick={props.handleAnalyzeClick(props.selectedSong)}>Analyze</Button>
-                    </form>
-                </>
-            } */}
         </section>
     );
 }

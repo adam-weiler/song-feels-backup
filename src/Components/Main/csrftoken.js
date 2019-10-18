@@ -1,6 +1,6 @@
 import React from 'react';
 
-function getCookie(name) {
+const getCookie = (name) => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         let cookies = document.cookie.split(';');
@@ -15,6 +15,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 let csrftoken = getCookie('csrftoken');
 
 const CSRFToken = () => {

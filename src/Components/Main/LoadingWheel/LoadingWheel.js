@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 // Call stylesheet last:
 import './LoadingWheel.css';
 
-const LoadingWheel = (props) => {
+const LoadingWheel = () => {
     return (
         <div class='spinnerContainer'>
             <Spinner animation="border" role="status">
