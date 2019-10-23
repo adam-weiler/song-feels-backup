@@ -39,9 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',  # < As per whitenoise documentation
     'django.contrib.staticfiles',
-
-    # 3rd party apps
     'rest_framework',
+    # 'django-ratelimit',
     'backend',
 ]
 

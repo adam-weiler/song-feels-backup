@@ -57,12 +57,12 @@ export default class Main extends Component {
         let artistQuery = document.querySelector('#artistInput').value;
 
         if (!songQuery) {
-            // console.error('Error; no song name.');
+            console.error('Error; no song name.');
             this.setState({
                 errorMessage: 'Please enter a valid song name.'
             });
         } else {
-            // console.log('User entered valid song name: ', songQuery);
+            console.log('User entered valid song name: ', songQuery);
 
             this.setState({
                 analyzing: true,
@@ -88,18 +88,36 @@ export default class Main extends Component {
                 // },
             })
             .then(response => {
+                // console.log(response)
                 // console.log(response.data.lyrics);
+
+                if (response.data.error) {
+                    // console.log(response.data.error);
+                    console.log(response.data.message);
+
+                    this.setState({
+                        analyzing: false,
+                        errorMessage: response.data.message,   // Returns error message to user.
+                    });
+
+                } else {
+                    console.log('no error')
+                    this.setState({
+                        analyzing: false,
+                        songAnalysis: '',   // Removes any previous song analysis (happens if user searches twice).
+                        errorMessage: '',   // Removes any previous error message.
+                        listOfSongs: response.data.lyrics,
+                        selectedSong: ''    // Removes any previous selected song (happens if user searches twice).
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error', error);
 
                 this.setState({
                     analyzing: false,
-                    songAnalysis: '',   // Removes any previous song analysis (happens if user searches twice).
-                    errorMessage: '',   // Removes any previous error message.
-                    listOfSongs: response.data.lyrics,
-                    selectedSong: ''    // Removes any previous selected song (happens if user searches twice).
+                    errorMessage: 'An error has occurred. Please try again later.',   // Returns error message to user.
                 });
-            })
-            .catch(error => {
-                // console.error('Error', error);
             });
         }
     }

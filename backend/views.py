@@ -32,6 +32,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+
+from ratelimit.decorators import ratelimit  # Used to limit number of searches user can perform.
+
+
 # SongFeels imports
 from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 from backend.special_words import special_words  # A list of special words that can be safely ignored since they are not actually part of the lyrics.
@@ -77,32 +81,44 @@ class SongView(View):
     # @requires_csrf_token
     # @csrf_protect
     @method_decorator(csrf_protect)
+
+    # @ratelimit(key='ip', method=ratelimit.ALL)
+    @ratelimit(key='ip', method='GET', rate='1/d')  # Current limit is set to 20 requests a day.
     def get(self, request):  # User has submit song request, which will be sent to API.
-    # Switch back to this
-    # def get(self):  # For testing only.
         print('\n***SongView - get***')
-        query = request.GET.urlencode()
-        print(request)
+        was_limited = getattr(request, 'limited', False)  # Saves if user has exceeded rate-limit.
+        # print(was_limited)
 
-        # print(f'https://api.audd.io/findLyrics/?{query}')
-
-        try:
-            data = {
-                'api_token' : audd_key
-            }
-            response = requests.post(f'https://api.audd.io/findLyrics/?{query}', data=data)
-            self.body = json.loads(response.content)
-            # print (self.body['result'])
-            print('Request to Audd has succeeded.')
+        if was_limited == True:  # User has exceeded rate-limit, will not query API.
+            print('User has exceeded API request limit.')
             return JsonResponse({
-                'lyrics': self.body['result']
+                'error': 403,
+                'message': 'User has exceeded API request limit. Please try again later.'
             })
-        except:
-            print('Request to Audd has failed.')
-            return JsonResponse({
-                'error': response.status_code,
-                'message': 'Something went wrong!'
-        })
+
+        else:  # User has not exceeded rate-limit, will now try to query API.
+            print('User still has API requests available.')
+            query = request.GET.urlencode()
+            # print(request)
+            # print(f'https://api.audd.io/findLyrics/?{query}')
+
+            try:
+                data = {
+                    'api_token' : audd_key
+                }
+                response = requests.post(f'https://api.audd.io/findLyrics/?{query}', data=data)
+                self.body = json.loads(response.content)
+                # print (self.body['result'])
+                print('Request to AuDD has succeeded.')
+                return JsonResponse({
+                    'lyrics': self.body['result']
+                })
+            except:
+                print('Request to AuDD has failed.')
+                return JsonResponse({
+                    'error': 500,
+                    'message': 'Unable to reach API at the moment. Please try again later.'
+                })
 
 
 class AnalyzeView(View):

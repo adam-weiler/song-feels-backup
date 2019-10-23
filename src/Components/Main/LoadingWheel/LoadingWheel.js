@@ -9,7 +9,7 @@ import './LoadingWheel.css';
 
 const LoadingWheel = () => {
     return (
-        <div class='spinnerContainer'>
+        <div className='spinnerContainer'>
             <Spinner animation="border" role="status">
                 <span className="sr-only">Loading...</span>
             </Spinner>

@@ -26,12 +26,6 @@ const SearchForm = (props) => {
                 </Form.Control.Feedback>
             </Form.Group>
 
-            {
-                !props.errorMessage
-                ? ''
-                : <Alert variant='danger'>{props.errorMessage}</Alert>
-            }
-
             <Form.Group controlId='artistInput'>
                 <Form.Label>Enter the name of the band or artist:</Form.Label>
                 <Form.Control type='text' name='artistInput' placeholder='Artist name (optional)' />
@@ -39,6 +33,12 @@ const SearchForm = (props) => {
             <Button variant='primary' type='submit' onClick={props.handleSearchClick} >
                 Search
             </Button>
+
+            {
+                !props.errorMessage
+                ? ''
+                : <Alert variant='danger'>{props.errorMessage}</Alert>
+            }
         </Form>
     );
 }
