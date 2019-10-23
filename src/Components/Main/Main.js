@@ -27,7 +27,7 @@ export default class Main extends Component {
         searchInput: '',
         listOfSongs: '',
         errorMessage: '',
-        selectedSong: '',
+        // selectedSong: '',
         songAnalysis: ''
     }
 
@@ -94,7 +94,7 @@ export default class Main extends Component {
                         songAnalysis: '',   // Removes any previous song analysis (happens if user searches twice).
                         errorMessage: '',   // Removes any previous error message.
                         listOfSongs: response.data.lyrics,
-                        selectedSong: ''    // Removes any previous selected song (happens if user searches twice).
+                        // selectedSong: ''    // Removes any previous selected song (happens if user searches twice).
                     });
                 }
             })
@@ -111,15 +111,14 @@ export default class Main extends Component {
 
     handleAnalyzeClick = (selectedSong) => event => {
         event.preventDefault();
-        console.log('User clicked a analyze a song:', this.state.selectedSong);
-        console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]['lyrics']);
+        console.log('User clicked a analyze a song:', selectedSong);
+        console.log('Song data:', this.state.listOfSongs[selectedSong]['lyrics']);
 
         this.setState({
             analyzing: true,
         });
 
         axios.post(`/api/song_analyze/`, {
-            // original_lyrics: this.state.listOfSongs[this.state.selectedSong]['lyrics']
             original_lyrics: this.state.listOfSongs[selectedSong]['lyrics']
         })
         .then(response => {
@@ -164,7 +163,7 @@ export default class Main extends Component {
                     !this.state.listOfSongs
                     ? ''
                     : <>
-                        <SearchResults listOfSongs={this.state.listOfSongs} selectedSong={this.state.selectedSong} handleShowModal={this.handleShowModal} handleAnalyzeClick={this.handleAnalyzeClick} />
+                        <SearchResults listOfSongs={this.state.listOfSongs} handleShowModal={this.handleShowModal} handleAnalyzeClick={this.handleAnalyzeClick} />
                     </>
                 }
 
