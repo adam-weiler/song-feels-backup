@@ -16,7 +16,7 @@ from django.conf import settings  # Not used in production.
 from django.http import HttpResponse, JsonResponse  # Used to send a response back to user.
 from django.views.decorators.csrf import csrf_exempt  # Remove this later to restrict CSRF access.
 from django.views.decorators.csrf import csrf_protect
-# from django.views.decorators.csrf import requires_csrf_token
+from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View  # Used for Django's Views.
 
 
@@ -26,10 +26,10 @@ from django.utils.decorators import method_decorator
 
 
 # These are for Django REST framework - Authentication:
-# from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 
 
 
@@ -66,9 +66,11 @@ class FrontendAppView(View):
 
 class SongView(View):
 
+    @csrf_exempt
     def __init__(self):
         self.body = ''
 
+    @csrf_exempt
     def __str__(self):
         return 'The SongView object.'
 
@@ -113,6 +115,7 @@ class SongView(View):
 
 class AnalyzeView(View):
 
+    @csrf_exempt
     def __init__(self):
         self.unfiltered_lyrics = ''  # The original lyrics from the API.
         self.filtered_lyrics = []  # The data-cleaned lyrics for the song.
@@ -121,6 +124,7 @@ class AnalyzeView(View):
         self.emotions__sum_percent = {'Anger':[0,0], 'Bored':[0,0], 'Excited':[0,0], 'Fear':[0,0], 'Happy':[0,0], 'Sad':[0,0]}  # The total number of times each emotion was experienced, and the overall percent each emotion was experienced.
 
 
+    @csrf_exempt
     def __str__(self):
         return 'The AnalyzeView object.'
 
