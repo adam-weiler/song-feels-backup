@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Image files:
-import audd_logo from './Img/AuddLogo.png';
+// import audd_logo from './Img/AuddLogo.png';
 import adam_weiler_logo from './Img/AdamWeilerLogo.png';
 
 // Call stylesheet last:
