@@ -111,8 +111,8 @@ export default class Main extends Component {
 
     handleAnalyzeClick = (selectedSong) => event => {
         event.preventDefault();
-        console.log('User clicked a analyze a song:', selectedSong);
-        console.log('Song data:', this.state.listOfSongs[selectedSong]['lyrics']);
+        // console.log('User clicked a analyze a song:', selectedSong);
+        // console.log('Song data:', this.state.listOfSongs[selectedSong]['lyrics']);
 
         this.setState({
             analyzing: true,
@@ -122,8 +122,8 @@ export default class Main extends Component {
             original_lyrics: this.state.listOfSongs[selectedSong]['lyrics']
         })
         .then(response => {
-            console.log('Then statement.');
-            console.log(response.data);
+            // console.log('Then statement.');
+            // console.log(response.data);
 
             this.setState({
                 analyzing: false,
@@ -132,7 +132,12 @@ export default class Main extends Component {
             });
         })
         .catch(error => {
-            console.error('Error', error);
+            // console.error('Error', error);
+
+            this.setState({
+                analyzing: false,
+                errorMessage: 'An error has occurred. Please try again later.',   // Returns error message to user.
+            });
         });
     }
 
