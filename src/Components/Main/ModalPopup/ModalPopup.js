@@ -10,7 +10,7 @@ import './ModalPopup.css';
 
 const ModalPopup = (props) => {
     return (
-        <Modal size="lg" show={props.showModal} onHide={props.handleClose} aria-labelledby="SongFeels explanation">
+        <Modal size="lg" show={props.showModal} onHide={props.handleCloseModal} aria-labelledby="SongFeels explanation">
             <Modal.Header closeButton>
                 <Modal.Title>{props.modalTitle}:</Modal.Title>
             </Modal.Header>

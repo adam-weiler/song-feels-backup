@@ -31,7 +31,7 @@ export default class Main extends Component {
         songAnalysis: ''
     }
 
-    handleShow = (modalTitle, modalBody) => (event) => {
+    handleShowModal = (modalTitle, modalBody) => (event) => {
         event.preventDefault();
 
         this.setState({
@@ -41,7 +41,7 @@ export default class Main extends Component {
         });
     }
 
-    handleClose = () => {
+    handleCloseModal = () => {
         this.setState({
             showModal: false,
             modalTitle: '',
@@ -57,12 +57,12 @@ export default class Main extends Component {
         let artistQuery = document.querySelector('#artistInput').value;
 
         if (!songQuery) {
-            console.error('Error; no song name.');
+            // console.error('Error; no song name.');
             this.setState({
                 errorMessage: 'Please enter a valid song name.'
             });
         } else {
-            console.log('User entered valid song name: ', songQuery);
+            // console.log('User entered valid song name: ', songQuery);
 
             this.setState({
                 analyzing: true,
@@ -72,28 +72,15 @@ export default class Main extends Component {
             if (artistQuery) {
                 query += `_${artistQuery}`;
             }
-            
-            // const token = localStorage.getItem('token');
-            // let csrftoken = Cookies.get("csrftoken");
 
-            // var csrfCookie = cookies.get('XSRF-TOKEN');
-
-            axios.get(`/api/song_search/?q=${query}`, {
-                // headers: { 'authorization': `Token ${token}`},
-                // "X-CSRFToken": csrftoken,
-                // "Content-Type": "application/x-www-form-urlencoded"
-                // xsrfHeaderName: "X-CSRFToken",
-                // headers: {
-                //     'X-CSRFTOKEN': csrfCookie,
-                // },
-            })
+            axios.get(`/api/song_search/?q=${query}`)
             .then(response => {
                 // console.log(response)
                 // console.log(response.data.lyrics);
 
                 if (response.data.error) {
                     // console.log(response.data.error);
-                    console.log(response.data.message);
+                    // console.log(response.data.message);
 
                     this.setState({
                         analyzing: false,
@@ -101,7 +88,7 @@ export default class Main extends Component {
                     });
 
                 } else {
-                    console.log('no error')
+                    // console.log('no error')
                     this.setState({
                         analyzing: false,
                         songAnalysis: '',   // Removes any previous song analysis (happens if user searches twice).
@@ -112,7 +99,7 @@ export default class Main extends Component {
                 }
             })
             .catch(error => {
-                console.error('Error', error);
+                // console.error('Error', error);
 
                 this.setState({
                     analyzing: false,
@@ -124,8 +111,8 @@ export default class Main extends Component {
 
     handleAnalyzeClick = (selectedSong) => event => {
         event.preventDefault();
-        // console.log('User clicked a analyze a song:', this.state.selectedSong);
-        // console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]['lyrics']);
+        console.log('User clicked a analyze a song:', this.state.selectedSong);
+        console.log('Song data:', this.state.listOfSongs[this.state.selectedSong]['lyrics']);
 
         this.setState({
             analyzing: true,
@@ -136,8 +123,8 @@ export default class Main extends Component {
             original_lyrics: this.state.listOfSongs[selectedSong]['lyrics']
         })
         .then(response => {
-            // console.log('Then statement.');
-            // console.log(response.data);
+            console.log('Then statement.');
+            console.log(response.data);
 
             this.setState({
                 analyzing: false,
@@ -146,7 +133,7 @@ export default class Main extends Component {
             });
         })
         .catch(error => {
-            // console.error('Error', error);
+            console.error('Error', error);
         });
     }
 
@@ -154,7 +141,7 @@ export default class Main extends Component {
         return (
             <main className='jumbotron jumbotron-fluid'>
                 {/* This only appears when user clicks Tell me More, or Lyrics. */}
-                <ModalPopup showModal={this.state.showModal} handleClose={this.handleClose} modalTitle={this.state.modalTitle} modalBody={this.state.modalBody} />
+                <ModalPopup showModal={this.state.showModal} handleCloseModal={this.handleCloseModal} modalTitle={this.state.modalTitle} modalBody={this.state.modalBody} />
                 
                 {
                     !this.state.analyzing
@@ -167,12 +154,9 @@ export default class Main extends Component {
                 <section className='section1'>
                     <h4>
                         <strong>SongFeels</strong> will analyze the lyrics of a song and determine which emotions the words are conveying. 
-                        {/* <a href='#' onClick={this.handleShow('Explanation', '')}>Tell me More</a> */}
-                        {/* <Button variant="info" onClick={this.handleShow('Explanation', '')}>Tell me More</Button> */}
-                        <button type="button" className="btn-info" onClick={this.handleShow('Explanation', '')}>Tell me More</button>                        
+                        <button type="button" className="btn-info" onClick={this.handleShowModal('Explanation', '')}>Tell me More</button>                        
                     </h4>
 
-                    {/* This only appears if there is an error with the Song name inputbox. */}
                     <SearchForm errorMessage={this.state.errorMessage} handleSearchClick={this.handleSearchClick} />
                 </section>
 
@@ -180,7 +164,7 @@ export default class Main extends Component {
                     !this.state.listOfSongs
                     ? ''
                     : <>
-                        <SearchResults listOfSongs={this.state.listOfSongs} selectedSong={this.state.selectedSong} handleShow={this.handleShow} handleAnalyzeClick={this.handleAnalyzeClick} />
+                        <SearchResults listOfSongs={this.state.listOfSongs} selectedSong={this.state.selectedSong} handleShowModal={this.handleShowModal} handleAnalyzeClick={this.handleAnalyzeClick} />
                     </>
                 }
 

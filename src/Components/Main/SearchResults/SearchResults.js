@@ -17,7 +17,7 @@ const SearchResults = (props) => {
                     "{elem.title}" by <em>{elem.artist}</em>&nbsp;
                 </div>
                 <div className='leftText'>                                     
-                    <Button className='btn-lyrics' variant="secondary" onClick={props.handleShow('Lyrics', props.listOfSongs[id])}>Lyrics</Button>
+                    <Button className='btn-lyrics' variant="secondary" onClick={props.handleShowModal('Lyrics', props.listOfSongs[id])}>Lyrics</Button>
 
                     <Button className='btn-analyze' variant="primary" onClick={props.handleAnalyzeClick(id)}>Analyze</Button>
                     {/* <Form.Check type="checkbox" label="Ignore Repeated Words" /> */}
