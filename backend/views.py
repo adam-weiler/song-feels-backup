@@ -15,13 +15,13 @@ audd_key = os.environ.get('AUDD_API_KEY')  # Stores API key from .env file.
 from django.conf import settings  # Not used in production.
 from django.http import HttpResponse, JsonResponse  # Used to send a response back to user.
 from django.views.decorators.csrf import csrf_exempt  # Remove this later to restrict CSRF access.
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.csrf import requires_csrf_token
+# from django.views.decorators.csrf import csrf_protect
+# from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View  # Used for Django's Views.
 
 
 # from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+# from django.utils.decorators import method_decorator
 
 
 
@@ -74,7 +74,7 @@ class SongView(View):
     def __str__(self):
         return 'The SongView object.'
 
-    @method_decorator(csrf_protect)
+    # @method_decorator(csrf_protect)
     @ratelimit(key='ip', method='GET', rate='20/d')  # Current limit is set to 20 requests a day.
     def get(self, request):  # User has submit song request, which will be sent to API.
         print('\n***SongView - get***')
