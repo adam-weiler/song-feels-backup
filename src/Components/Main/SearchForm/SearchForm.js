@@ -14,8 +14,7 @@ import './SearchForm.css';
 const SearchForm = (props) => {
     return (
         <Form>
-            {/* {% csrf_token %} */}
-            {/* <CSRFToken /> */}
+            <CSRFToken />
             
             <Form.Group controlId='songInput'>
                 <Form.Label>Enter the name of the song you want to search for:</Form.Label>

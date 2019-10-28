@@ -1,39 +1,12 @@
 * {
-  box-sizing: border-box;
- }
- 
- *:before,
- *:after {
-  box-sizing: border-box;
- }
-
-.App {
-  text-align: center;
+    box-sizing: border-box;
 }
 
 .App {
-  min-height: 100vh; /* will cover the 100% of viewport */
- overflow: hidden;
- display: block;
- position: relative;
- padding-bottom: 100px; /* height of your footer */
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
+    padding-bottom: 100px; /* height of your footer */
+    min-height: 100vh; /* will cover the 100% of viewport */
+    position: relative;
+    overflow: hidden;
+    display: block;
+    text-align: center;
 }

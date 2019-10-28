@@ -5,7 +5,6 @@
 
 .jumbotron {
     margin: 0 auto;
-    /* background-color: beige; */
     max-width: 800px;
     padding: 0px !important;
     background-color: transparent !important;
@@ -71,7 +70,7 @@ ul {
     border: none;
     padding: 0 !important;
     font-family: arial, sans-serif;
-    color: #17a2b8 !important;
+    color: #107484 !important;
     cursor: pointer;
     border-color: transparent !important;
 }

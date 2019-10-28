@@ -1,16 +1,10 @@
 footer {
-    position: absolute;
-    /* top: 1000px; */
-    /* height: 4rem; */
     bottom: 0;
     width: 100%;
     height: 60px; /* Set the fixed height of the footer here */
-    /* position: absolute; */
-    /* position: fixed; */
+    position: absolute;
     text-align: center;
-    /* border-top: 1px solid black; */
     background-color: #04091e;
-    /* opacity: 0.8; */
 }
 
 footer li {
@@ -23,8 +17,4 @@ footer li {
 
 footer li a img {
     width: 40px;
-}
-
-img {
-    width: 350px;
 }

@@ -10,11 +10,13 @@ import './Header.css';
 const Header = () => {
     return (
         <header>
-            {/* <img src={song_feels_logo} border='0' alt='SongFeels logo' />  */}
-                {/* <div className="float-right pl-20"> */}
-                    <h1 className="text-center">SongFeels</h1>
-                    <p>Lyrics Sentiment Analysis</p>
-                {/* </div> */}
+            <div className="logo">
+                <img src={song_feels_logo} border='0' alt='SongFeels logo' /> 
+                    <div className="float-right">
+                        <h1 className="text-center">SongFeels</h1>
+                        <p>Lyrics Sentiment Analysis</p>
+                    </div>
+                </div>
         </header>
     );
 }
