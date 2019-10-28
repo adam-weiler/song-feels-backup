@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',  # < As per whitenoise documentation
     'django.contrib.staticfiles',
     'rest_framework',
-    # 'django-ratelimit',
     'backend',
 ]
 
@@ -141,22 +140,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'build', 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#     ),
-# }
-
 CSRF_COOKIE_NAME = "csrftoken"
-# CSRF_COOKIE_NAME = "XSRF-TOKEN"
-
-
-# from corsheaders.defaults import default_headers
-
-# CORS_ALLOW_HEADERS = list(default_headers) + [
-#     'X-CSRFTOKEN',
-# ]
-
 
 MIDDLEWARE_CLASSES = { 'django.middleware.csrf.CsrfViewMiddleware' }

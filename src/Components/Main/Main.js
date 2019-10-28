@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 // Third-party libraries:
 import axios from 'axios';
-// import CSRFToken from './csrftoken';
 
 // Smaller components:
 import AnalyzedResults from './AnalyzedResults/AnalyzedResults.js';
@@ -12,12 +11,9 @@ import ModalPopup from './ModalPopup/ModalPopup.js';
 import SearchForm from './SearchForm/SearchForm.js';
 import SearchResults from './SearchResults/SearchResults.js';
 
-// Bootstrap-React components:
-// import Button from 'react-bootstrap/Button';
-
-// Call stylesheet last:
 import './Main.css';
 
+// Call Axios last:
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 

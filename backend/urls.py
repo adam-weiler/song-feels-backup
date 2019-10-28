@@ -17,21 +17,9 @@ from backend import views  # Import our views.py file.
 from django.conf.urls import url
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.csrf import requires_csrf_token
-
-# from .views import index
 
 urlpatterns = [
-    # path('', index, name='index'),
-    # path('admin/', admin.site.urls),
-    # path('api/it/', csrf_exempt(views.ApiView.as_view())),
-
-    # path('api/song_search/', csrf_exempt(views.SongView.as_view())),
-    path('api/song_search/', requires_csrf_token(views.SongView.as_view())),
-
-    # path('api/song_analyze/', csrf_exempt(views.AnalyzeView.as_view())),
-    path('api/song_analyze/', requires_csrf_token(views.AnalyzeView.as_view())),
-    
-
+    path('api/song_search/', csrf_exempt(views.SongView.as_view())),
+    path('api/song_analyze/', csrf_exempt(views.AnalyzeView.as_view())),
     url(r'^', views.FrontendAppView.as_view()) # This is a catch-all for React.
 ]

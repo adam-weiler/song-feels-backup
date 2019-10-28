@@ -2,3 +2,9 @@
     width: 100px;
     height: 100px;
 }
+
+@media (max-width: 414px) {  /* Hides Valence, Arousal, Dominance column on smaller screens. */
+    .showHideColumn {
+        display: none;
+    }
+}

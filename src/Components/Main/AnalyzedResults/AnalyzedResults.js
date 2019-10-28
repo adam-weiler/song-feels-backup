@@ -16,12 +16,15 @@ import Fear from './Img/face-screaming-in-fear.png';
 import Happy from './Img/grinning-face-with-smiling-eyes.png';
 import Sad from './Img/pensive-face.png';
 
+// Font Awesome:
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt, faHandRock, faSmile, faTheaterMasks } from '@fortawesome/free-solid-svg-icons';
+
 // Call stylesheet last:
 import './AnalyzedResults.css';
 
 const AnalyzedResults = (props) => {
     let emotionsSumPercentElements;
-
     let filteredLyricsElements;
     let vadLyricsElements;
 
@@ -44,21 +47,13 @@ const AnalyzedResults = (props) => {
             (elem, id) => <tr key={elem.word}>
                 <td>{id + 1}</td>
                 <td>{elem.word}</td>
-                <td>{elem.v_mean_sum}</td>
-                <td>{elem.a_mean_sum}</td>
-                <td>{elem.d_mean_sum}</td>
+                <td className='showHideColumn'>{elem.v_mean_sum}</td>
+                <td className='showHideColumn'>{elem.a_mean_sum}</td>
+                <td className='showHideColumn'>{elem.d_mean_sum}</td>
                 <td>{elem.emotionBasic}</td>
             </tr>
         );
     }
-
-// hand-rock
-
-// theater-masks
-
-// smile
-
-// bolt
 
     return (
         <section className='section3'>
@@ -89,16 +84,16 @@ const AnalyzedResults = (props) => {
                             <tr>
                                 <th>#</th>
                                 <th>Word:</th>
-                                <th>
-                                    <span className='info-box' title="Valence is how negative or positive the word is viewed.">Valence:</span>
+                                <th className='showHideColumn'>
+                                    <span className='info-box' title="Valence is how negative or positive the word is viewed."><FontAwesomeIcon icon={faSmile} /> Valence:</span>
                                 </th>
-                                <th>
-                                    <span className='info-box' title="Arousal is how boring or exciting the word is viewed.">Arousal:</span>
+                                <th className='showHideColumn'>
+                                    <span className='info-box' title="Arousal is how boring or exciting the word is viewed."><FontAwesomeIcon icon={faBolt} /> Arousal:</span>
                                 </th>
-                                <th>
-                                    <span className='info-box' title="Dominance is how powerless or in control the word feels.">Dominance:</span>
+                                <th className='showHideColumn'>
+                                    <span className='info-box' title="Dominance is how powerless or in control the word feels."><FontAwesomeIcon icon={faHandRock} /> Dominance:</span>
                                 </th>
-                                <th>Emotion:</th>
+                                <th><FontAwesomeIcon icon={faTheaterMasks} /> Emotion:</th>
                             </tr>
                         </thead>
                         <tbody>

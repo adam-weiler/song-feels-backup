@@ -1,45 +1,32 @@
 # Python imports:
 import csv  # Used to open .CSV files.
-import dotenv  # Used to load APIkey from .env file.
 import json  # Used to work with JSON files.
 import logging  # Not used in production.
 import os  # Used to load APIkey from .env file.
 import re  # Used to strip punctuation from unfiltered_lyrics.
-import requests  # Used to make API calls.
-
-dotenv.load_dotenv()
-audd_key = os.environ.get('AUDD_API_KEY')  # Stores API key from .env file.
-
 
 # Django imports:
 from django.conf import settings  # Not used in production.
 from django.http import HttpResponse, JsonResponse  # Used to send a response back to user.
 from django.views.decorators.csrf import csrf_exempt  # Remove this later to restrict CSRF access.
-# from django.views.decorators.csrf import csrf_protect
-# from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View  # Used for Django's Views.
 
-
-# from django.contrib.auth.decorators import login_required
-# from django.utils.decorators import method_decorator
-
-
-
-# These are for Django REST framework - Authentication:
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+# Django REST framework:
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
-
+# Third-party imports
+import dotenv  # Used to load APIkey from .env file.
 from ratelimit.decorators import ratelimit  # Used to limit number of searches user can perform.
-
+import requests  # Used to make API calls.
 
 # SongFeels imports
 from backend.common_words import common_words  # A list of common or short words that can be safely ignored since they are not in the VAD database.
 from backend.special_words import special_words  # A list of special words that can be safely ignored since they are not actually part of the lyrics.
 
+# Stores API key from .env file.
+dotenv.load_dotenv()
+audd_key = os.environ.get('AUDD_API_KEY')  
 
 
 class FrontendAppView(View):
@@ -74,7 +61,6 @@ class SongView(View):
     def __str__(self):
         return 'The SongView object.'
 
-    # @method_decorator(csrf_protect)
     @ratelimit(key='ip', method='GET', rate='20/d')  # Current limit is set to 20 requests a day.
     def get(self, request):  # User has submit song request, which will be sent to API.
         print('\n***SongView - get***')
@@ -274,7 +260,6 @@ class AnalyzeView(View):
 
         return lyrics
 
-
     # def removeSpecialWords(self, lyrics):  # Removes any lyrics that are special_words.
     #     print('\n***AnalyzeView - removeSpecialWords***')
     #     for word in special_words:
@@ -362,7 +347,7 @@ new_analysis = AnalyzeView()
 
 
 
-##These are for testing only.
+# Psuedocode:
 # new_song_search.get() # User searches for a song.  ***SongView - get***
                         # Calls AuDD API:            ***SongView - get***
 
@@ -374,16 +359,3 @@ new_analysis = AnalyzeView()
                                 # Compare lyrics to VAD file.	***AnalyzeView - compareToVADfile***
                                     # Assign emotion to each word.		***AnalyzeView - whichEmotionBasic***
                                 # Get VAD average for lyrics.	***AnalyzeView - getVADaverages***
-
-
-# For graphing
-# import matplotlib.pyplot as plt
-# plt.plot([1, 2, 3, 4])
-# plt.ylabel('some numbers')
-# plt.show()
-
-# Find location of directory.
-# cwd = os.getcwd()
-# files = os.listdir(cwd)
-# print(cwd)
-# print(files)
