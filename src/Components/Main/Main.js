@@ -1,5 +1,5 @@
 // Vanilla React:
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 
 // Third-party libraries:
 import axios from 'axios';
